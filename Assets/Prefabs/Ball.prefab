@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1179785950823362798}
   m_Layer: 0
   m_Name: Ball
-  m_TagString: Untagged
+  m_TagString: Ball
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -126,4 +126,5 @@ MonoBehaviour:
   row: 0
   targetx: 0
   targety: 0
+  matched: 0
   angle: 0

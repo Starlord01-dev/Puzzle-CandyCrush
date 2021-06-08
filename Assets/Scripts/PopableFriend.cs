@@ -9,6 +9,7 @@ public class PopableFriend : MonoBehaviour
     public int row;
     public int targetx;
     public int targety;
+    public bool matched = false;
     private GameObject otherPopable;
     private Board board;
     private Vector2 firstTouchPos;
@@ -30,6 +31,13 @@ public class PopableFriend : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        FindMatch();
+        if (matched)
+        {
+            SpriteRenderer thisSprite = GetComponent<SpriteRenderer>();
+            thisSprite.color = new Color(1f, 1f, 1f, .2f);
+        }
+
         targetx = column;
         targety = row;
         if(Mathf.Abs(targetx-transform.position.x) > .01)
@@ -79,13 +87,15 @@ public class PopableFriend : MonoBehaviour
 
     void MovePopable()
     {
-        if((angle > -45 && angle <= 45) && column < board.width)
+        
+
+        if((angle > -45 && angle <= 45) && column < board.width-1)
         {
             //RightSwipe
             otherPopable = board.Popables[column + 1, row];
             otherPopable.GetComponent<PopableFriend>().column -= 1;
             column += 1;
-        }else if((angle > 45 && angle <= 135) && row < board.height)
+        }else if((angle > 45 && angle <= 135) && row < board.height-1)
         {
             //UpSwipe
             otherPopable = board.Popables[column , row+1];
@@ -105,6 +115,32 @@ public class PopableFriend : MonoBehaviour
             otherPopable = board.Popables[column, row - 1];
             otherPopable.GetComponent<PopableFriend>().row += 1;
             row -= 1;
+        }
+    }
+
+    void FindMatch()
+    {
+        if(column > 0 && column < board.width - 1)
+        {
+            GameObject leftPopable1 = board.Popables[column - 1, row];
+            GameObject rightPopable1 = board.Popables[column + 1, row];
+            if(leftPopable1.tag == this.gameObject.tag && rightPopable1.tag == this.gameObject.tag)
+            {
+                leftPopable1.GetComponent<PopableFriend>().matched = true;
+                rightPopable1.GetComponent<PopableFriend>().matched = true;
+                matched = true;
+            }
+        }
+        if (row > 0 && row < board.height - 1)
+        {
+            GameObject downPopable1 = board.Popables[column, row-1];
+            GameObject upPopable1 = board.Popables[column , row+1];
+            if (downPopable1.tag == this.gameObject.tag && upPopable1.tag == this.gameObject.tag)
+            {
+                downPopable1.GetComponent<PopableFriend>().matched = true;
+                upPopable1.GetComponent<PopableFriend>().matched = true;
+                matched = true;
+            }
         }
     }
 

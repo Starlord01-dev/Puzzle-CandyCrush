@@ -120,6 +120,53 @@ public class Board : MonoBehaviour
             nullCount = 0;
         }
         yield return new WaitForSeconds(.4f);
+        StartCoroutine(FillBoardCoroutine());
+    }
+
+    private void RefillBoard()
+    {
+        for(int i = 0; i< width; i++)
+        {
+            for(int j = 0; j < height; j++)
+            {
+                if(Popables[i,j] == null)
+                {
+                    Vector2 tempPos = new Vector2(i, j);
+                    int randomPick = Random.Range(0, PopablesPrefab.Length);
+                    GameObject popable = Instantiate(PopablesPrefab[randomPick], tempPos, Quaternion.identity);
+                    Popables[i, j] = popable;
+                }
+            }
+        }
+    }
+
+    private bool MatchesOnBoard()
+    {
+        for(int i = 0; i < width; i++)
+        {
+            for(int j = 0; j < height; j++)
+            {
+                if(Popables[i, j] != null)
+                {
+                    if(Popables[i, j].GetComponent<PopableFriend>().matched)
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    private IEnumerator FillBoardCoroutine()
+    {
+        RefillBoard();
+        yield return new WaitForSeconds(.5f);
+
+        while(MatchesOnBoard()){
+            yield return new WaitForSeconds(.5f);
+            DestroyMatches();
+        }
     }
 
 }

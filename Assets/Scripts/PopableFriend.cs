@@ -7,6 +7,8 @@ public class PopableFriend : MonoBehaviour
 
     public int column;
     public int row;
+    public int prevColumn;
+    public int prevRow;
     public int targetx;
     public int targety;
     public bool matched = false;
@@ -26,6 +28,8 @@ public class PopableFriend : MonoBehaviour
         targety =(int)transform.position.y ;
         row = targety;
         column = targetx;
+        prevColumn = column;
+        prevRow = row;
     }
 
     // Update is called once per frame
@@ -44,7 +48,7 @@ public class PopableFriend : MonoBehaviour
         {
             //Move Popable
             tempPos = new Vector2(targetx, transform.position.y);
-            transform.position = Vector2.Lerp(transform.position, tempPos, .06f);
+            transform.position = Vector2.Lerp(transform.position, tempPos, .02f);
         }
         else
         {
@@ -65,6 +69,22 @@ public class PopableFriend : MonoBehaviour
             tempPos = new Vector2(transform.position.x, targety);
             transform.position = tempPos;
             board.Popables[column, row] = this.gameObject;
+        }
+    }
+
+    public IEnumerator CheckMoveCoroutine()
+    {
+        yield return new WaitForSeconds(.5f);
+        if(otherPopable != null)
+        {
+            if (!matched && !otherPopable.GetComponent<PopableFriend>().matched)
+            {
+                otherPopable.GetComponent<PopableFriend>().row = row;
+                otherPopable.GetComponent<PopableFriend>().column = column;
+                row = prevRow;
+                column = prevColumn;
+            }
+            otherPopable = null;
         }
     }
 
@@ -116,6 +136,7 @@ public class PopableFriend : MonoBehaviour
             otherPopable.GetComponent<PopableFriend>().row += 1;
             row -= 1;
         }
+        StartCoroutine(CheckMoveCoroutine());
     }
 
     void FindMatch()

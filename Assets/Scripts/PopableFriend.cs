@@ -18,6 +18,7 @@ public class PopableFriend : MonoBehaviour
     private Vector2 lastTouchPos;
     private Vector2 tempPos;
     public float angle = 0;
+    public float swipeResist = 1f;
 
     // Start is called before the first frame update
     void Start()
@@ -101,8 +102,12 @@ public class PopableFriend : MonoBehaviour
 
     void GetAngle()
     {
-        angle = Mathf.Atan2(lastTouchPos.y - firstTouchPos.y, lastTouchPos.x - firstTouchPos.x)*180/Mathf.PI;
-        MovePopable();
+        //Check if the angle is bigger than 0 because if you click it registers as 0
+        if (Mathf.Abs(lastTouchPos.y - firstTouchPos.y) > swipeResist || Mathf.Abs(lastTouchPos.x - firstTouchPos.x) > swipeResist)
+        {
+            angle = Mathf.Atan2(lastTouchPos.y - firstTouchPos.y, lastTouchPos.x - firstTouchPos.x) * 180 / Mathf.PI;
+            MovePopable();
+        }
     }
 
     void MovePopable()

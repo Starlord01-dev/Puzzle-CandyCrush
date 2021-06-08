@@ -50,26 +50,32 @@ public class PopableFriend : MonoBehaviour
             //Move Popable
             tempPos = new Vector2(targetx, transform.position.y);
             transform.position = Vector2.Lerp(transform.position, tempPos, .02f);
+            if(board.Popables[column, row] != this.gameObject)
+            {
+                board.Popables[column, row] = this.gameObject;
+            }
         }
         else
         {
             //Directly set the pos
             tempPos = new Vector2(targetx, transform.position.y);
             transform.position = tempPos;
-            board.Popables[column, row] = this.gameObject;
         }
         if (Mathf.Abs(targety - transform.position.y) > .01)
         {
             //Move Popable
             tempPos = new Vector2(transform.position.x, targety);
             transform.position = Vector2.Lerp(transform.position, tempPos, .06f);
+            if (board.Popables[column, row] != this.gameObject)
+            {
+                board.Popables[column, row] = this.gameObject;
+            }
         }
         else
         {
             //Directly set the pos
             tempPos = new Vector2(transform.position.x, targety);
             transform.position = tempPos;
-            board.Popables[column, row] = this.gameObject;
         }
     }
 
@@ -85,8 +91,13 @@ public class PopableFriend : MonoBehaviour
                 row = prevRow;
                 column = prevColumn;
             }
+            else
+            {
+                board.DestroyMatches();
+            }
             otherPopable = null;
         }
+        
     }
 
     private void OnMouseDown()
@@ -146,26 +157,31 @@ public class PopableFriend : MonoBehaviour
 
     void FindMatch()
     {
-        if(column > 0 && column < board.width - 1)
+        if (column > 0 && column < board.width - 1)
         {
             GameObject leftPopable1 = board.Popables[column - 1, row];
             GameObject rightPopable1 = board.Popables[column + 1, row];
-            if(leftPopable1.tag == this.gameObject.tag && rightPopable1.tag == this.gameObject.tag)
-            {
-                leftPopable1.GetComponent<PopableFriend>().matched = true;
-                rightPopable1.GetComponent<PopableFriend>().matched = true;
-                matched = true;
+            if (leftPopable1 != null && rightPopable1 != null) {
+                if (leftPopable1.tag == this.gameObject.tag && rightPopable1.tag == this.gameObject.tag)
+                {
+                    leftPopable1.GetComponent<PopableFriend>().matched = true;
+                    rightPopable1.GetComponent<PopableFriend>().matched = true;
+                    matched = true;
+                }
             }
         }
         if (row > 0 && row < board.height - 1)
         {
             GameObject downPopable1 = board.Popables[column, row-1];
             GameObject upPopable1 = board.Popables[column , row+1];
-            if (downPopable1.tag == this.gameObject.tag && upPopable1.tag == this.gameObject.tag)
+            if (downPopable1 != null && upPopable1 != null)
             {
-                downPopable1.GetComponent<PopableFriend>().matched = true;
-                upPopable1.GetComponent<PopableFriend>().matched = true;
-                matched = true;
+                if (downPopable1.tag == this.gameObject.tag && upPopable1.tag == this.gameObject.tag)
+                {
+                    downPopable1.GetComponent<PopableFriend>().matched = true;
+                    upPopable1.GetComponent<PopableFriend>().matched = true;
+                    matched = true;
+                }
             }
         }
     }

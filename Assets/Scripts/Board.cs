@@ -77,4 +77,49 @@ public class Board : MonoBehaviour
         return false;
     }
 
+    private void DestroyMatchesAt(int column, int row)
+    {
+        if(Popables[column, row].GetComponent<PopableFriend>().matched)
+        {
+            Destroy(Popables[column, row]);
+            Popables[column, row] = null;
+        }
+    }
+
+    public void DestroyMatches()
+    {
+        for(int i = 0; i < width; i++)
+        {
+            for(int j = 0; j< height; j++)
+            {
+                if (Popables[i, j] != null)
+                {
+                    DestroyMatchesAt(i, j);
+                }
+            }
+        }
+        StartCoroutine(DecreaseRowCoroutine());
+    }
+
+    private IEnumerator DecreaseRowCoroutine()
+    {
+        int nullCount = 0;
+        for(int i = 0; i < width; i++)
+        {
+            for(int j = 0; j < height; j++)
+            {
+                if (Popables[i, j] == null)
+                {
+                    nullCount++;
+                }else if(nullCount > 0)
+                {
+                    Popables[i, j].GetComponent<PopableFriend>().row -= nullCount;
+                    Popables[i, j] = null;
+                }
+            }
+            nullCount = 0;
+        }
+        yield return new WaitForSeconds(.4f);
+    }
+
 }

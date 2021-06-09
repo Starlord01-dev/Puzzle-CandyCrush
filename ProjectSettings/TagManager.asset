@@ -11,6 +11,9 @@ TagManager:
   - PyramidHead
   - Star
   - Triangle
+  - BlueEyesBall
+  - BluePyramid
+  - RedEyesBox
   layers:
   - Default
   - TransparentFX

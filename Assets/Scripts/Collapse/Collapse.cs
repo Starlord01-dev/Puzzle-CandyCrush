@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Collapse : MonoBehaviour
 {
-
+    public int column;
+    public int row;
     public bool matched = false;
     private CollapseBoard board;
 
@@ -12,6 +13,8 @@ public class Collapse : MonoBehaviour
     void Start()
     {
         board = FindObjectOfType<CollapseBoard>();
+        column = (int)transform.position.x;
+        row = (int)transform.position.y;
     }
 
     // Update is called once per frame

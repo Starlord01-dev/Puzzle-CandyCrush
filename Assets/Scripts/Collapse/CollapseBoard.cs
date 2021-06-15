@@ -102,6 +102,7 @@ public class CollapseBoard : MonoBehaviour
             }
         }
         StartCoroutine(DecreaseRowCoroutine());
+        StartCoroutine(DecreaseColumnCoroutine());
     }
 
     private IEnumerator DecreaseRowCoroutine()
@@ -126,6 +127,32 @@ public class CollapseBoard : MonoBehaviour
             }
         }
         yield return new WaitForSeconds(.4f);
+        
+    }
+
+    private IEnumerator DecreaseColumnCoroutine()
+    {
+        for(int k = 0; k < width; k++)
+        {
+            if (Popables[k,0] == null)
+            {
+                for(int i=k-1;i>-1;i--)
+                {
+                    for(int j=0; j < height; j++)
+                    {
+                        if(Popables[i, j] != null)
+                        {
+                            Popables[i, j].GetComponent<Collapse>().column += 1;
+                            Popables[i + 1 , j] = Popables[i, j];
+                            Popables[i + 1 , j].transform.position = new Vector2(Popables[i, j].GetComponent<Collapse>().column, Popables[i, j].GetComponent<Collapse>().row);
+                            Popables[i + 1, j].tag = Popables[i, j].tag;
+                            Popables[i, j] = null;
+                        }
+                    }
+                }
+            }
+        }
+        yield return new WaitForSeconds(.6f);
     }
 
 }

@@ -51,79 +51,30 @@ public class CollapseBoard : MonoBehaviour
 
     public void Match(int row, int column)
     {
+        Popables[column, row].GetComponent<Collapse>().matched = true;
         try
         {
-            if (Popables[column, row] != null)
-            {
-                Popables[column, row].GetComponent<Collapse>().matched = true;
-                if ((column < width - 1 && row < height - 1) && (column > 0 && row > 0))
-                {
-                    Popables[column, row - 1].GetComponent<Collapse>().isMatch(Popables[column, row]);
-                    Popables[column - 1, row].GetComponent<Collapse>().isMatch(Popables[column, row]);
-                    Popables[column, row + 1].GetComponent<Collapse>().isMatch(Popables[column, row]);
-                    Popables[column + 1, row].GetComponent<Collapse>().isMatch(Popables[column, row]);
-                }
-                else if (column == width - 1)
-                {
-                    if (row == height - 1)
-                    {
-                        Popables[column, row - 1].GetComponent<Collapse>().isMatch(Popables[column, row]);
-                        Popables[column - 1, row].GetComponent<Collapse>().isMatch(Popables[column, row]);
-                    }
-                    else
-                    {
-                        if (row == 0)
-                        {
-                            Popables[column - 1, row].GetComponent<Collapse>().isMatch(Popables[column, row]);
-                            Popables[column, row + 1].GetComponent<Collapse>().isMatch(Popables[column, row]);
-                        }
-                        else
-                        {
-                            Popables[column, row - 1].GetComponent<Collapse>().isMatch(Popables[column, row]);
-                            Popables[column - 1, row].GetComponent<Collapse>().isMatch(Popables[column, row]);
-                            Popables[column, row + 1].GetComponent<Collapse>().isMatch(Popables[column, row]);
-                        }
-                    }
-                }
-                else if (column == 0)
-                {
-                    if (row == height - 1)
-                    {
-                        Popables[column + 1, row].GetComponent<Collapse>().isMatch(Popables[column, row]);
-                        Popables[column, row - 1].GetComponent<Collapse>().isMatch(Popables[column, row]);
-                    }
-                    else
-                    {
-                        if (row == 0)
-                        {
-                            Popables[column, row + 1].GetComponent<Collapse>().isMatch(Popables[column, row]);
-                            Popables[column + 1, row].GetComponent<Collapse>().isMatch(Popables[column, row]);
-                        }
-                        else
-                        {
-                            Popables[column, row + 1].GetComponent<Collapse>().isMatch(Popables[column, row]);
-                            Popables[column + 1, row].GetComponent<Collapse>().isMatch(Popables[column, row]);
-                            Popables[column, row - 1].GetComponent<Collapse>().isMatch(Popables[column, row]);
-                        }
-                    }
-                }
-                else if (column < width - 1)
-                {
-                    if (row == 0)
-                    {
-                        Popables[column, row + 1].GetComponent<Collapse>().isMatch(Popables[column, row]);
-                        Popables[column + 1, row].GetComponent<Collapse>().isMatch(Popables[column, row]);
-                        Popables[column - 1, row].GetComponent<Collapse>().isMatch(Popables[column, row]);
-                    }
-                    else if (row == height - 1)
-                    {
-                        Popables[column + 1, row].GetComponent<Collapse>().isMatch(Popables[column, row]);
-                        Popables[column - 1, row].GetComponent<Collapse>().isMatch(Popables[column, row]);
-                        Popables[column, row - 1].GetComponent<Collapse>().isMatch(Popables[column, row]);
-                    }
-                }
-            }
-        }catch {}
+            Popables[column, row - 1].GetComponent<Collapse>().isMatch(Popables[column, row]);
+        }
+        catch { }
+
+        try
+        {
+            Popables[column, row + 1].GetComponent<Collapse>().isMatch(Popables[column, row]);
+        }
+        catch { }
+
+        try
+        {
+            Popables[column - 1, row].GetComponent<Collapse>().isMatch(Popables[column, row]);
+        }
+        catch { }
+
+        try
+        {
+            Popables[column + 1, row].GetComponent<Collapse>().isMatch(Popables[column, row]);
+        }
+        catch { }
     }
 
     private void DestroyMatchesAt(int column, int row)

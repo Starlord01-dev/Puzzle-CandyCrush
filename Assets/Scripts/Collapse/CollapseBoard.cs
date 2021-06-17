@@ -6,6 +6,8 @@ public class CollapseBoard : MonoBehaviour
 {
     public int width;
     public int height;
+    public int Score;
+    private int numbOfBlocksPoped;
     public GameObject TilePrefab;
     public GameObject[] PopablesPrefab;
     private BackgroundTile[,] board;
@@ -17,6 +19,8 @@ public class CollapseBoard : MonoBehaviour
     {
         board = new BackgroundTile[width, height];
         Popables = new GameObject[width, height];
+        numbOfBlocksPoped = 0;
+        Score = 0;
         Create_Board();
 
     }
@@ -28,6 +32,22 @@ public class CollapseBoard : MonoBehaviour
             mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Match((int)Mathf.Round(mousePos.y), (int)Mathf.Round(mousePos.x));
             DestroyMatches();
+            if(numbOfBlocksPoped > 2 && numbOfBlocksPoped < 5)
+            {
+                Score += 10 * numbOfBlocksPoped;
+            }else if(numbOfBlocksPoped >= 5 && numbOfBlocksPoped < 8)
+            {
+                Score += 20 * numbOfBlocksPoped;
+            }else if(numbOfBlocksPoped <= 2 && numbOfBlocksPoped > 0)
+            {
+                Score -= 50;
+            }
+            else
+            {
+                Score += 30 * numbOfBlocksPoped;
+            }
+            numbOfBlocksPoped = 0;
+            Debug.Log(Score);
         }
     }
 
@@ -51,30 +71,30 @@ public class CollapseBoard : MonoBehaviour
 
     public void Match(int row, int column)
     {
-        Popables[column, row].GetComponent<Collapse>().matched = true;
-        try
-        {
-            Popables[column, row - 1].GetComponent<Collapse>().isMatch(Popables[column, row]);
-        }
-        catch { }
+            Popables[column, row].GetComponent<Collapse>().matched = true;
+            try
+            {
+                Popables[column, row - 1].GetComponent<Collapse>().isMatch(Popables[column, row]);
+            }
+            catch { }
 
-        try
-        {
-            Popables[column, row + 1].GetComponent<Collapse>().isMatch(Popables[column, row]);
-        }
-        catch { }
+            try
+            {
+                Popables[column, row + 1].GetComponent<Collapse>().isMatch(Popables[column, row]);
+            }
+            catch { }
 
-        try
-        {
-            Popables[column - 1, row].GetComponent<Collapse>().isMatch(Popables[column, row]);
-        }
-        catch { }
+            try
+            {
+                Popables[column - 1, row].GetComponent<Collapse>().isMatch(Popables[column, row]);
+            }
+            catch { }
 
-        try
-        {
-            Popables[column + 1, row].GetComponent<Collapse>().isMatch(Popables[column, row]);
-        }
-        catch { }
+            try
+            {
+                Popables[column + 1, row].GetComponent<Collapse>().isMatch(Popables[column, row]);
+            }
+            catch { }
     }
 
     private void DestroyMatchesAt(int column, int row)
@@ -83,6 +103,7 @@ public class CollapseBoard : MonoBehaviour
         {
             Destroy(Popables[column, row]);
             Popables[column, row] = null;
+            numbOfBlocksPoped++;
         }
     }
 

@@ -8,12 +8,14 @@ public class CollapseBoard : MonoBehaviour
     public int height;
     public int Score;
     private int numbOfBlocksPoped;
+    public GameObject CoinPrefab;
     public GameObject TilePrefab;
     public GameObject[] PopablesPrefab;
     private BackgroundTile[,] board;
     public GameObject[,] Popables;
     private Vector2 mousePos;
-
+    public int coinsCollected;
+    private bool withDiagonal = false;
 
     void Start()
     {
@@ -21,6 +23,7 @@ public class CollapseBoard : MonoBehaviour
         Popables = new GameObject[width, height];
         numbOfBlocksPoped = 0;
         Score = 0;
+        coinsCollected = 0;
         Create_Board();
 
     }
@@ -47,7 +50,6 @@ public class CollapseBoard : MonoBehaviour
                 Score += 30 * numbOfBlocksPoped;
             }
             numbOfBlocksPoped = 0;
-            Debug.Log(Score);
         }
     }
 
@@ -57,44 +59,95 @@ public class CollapseBoard : MonoBehaviour
         {
             for (int j = 0; j < height; j++)
             {
-                Vector3 Pos = new Vector3(i, j, 0);
-                GameObject backgroundTile = Instantiate(TilePrefab, Pos, Quaternion.identity) as GameObject;
-                backgroundTile.name = "( " + i + ", " + j + " )";
-                int pickRand = Random.Range(0, PopablesPrefab.Length);
+                int coinpick = Random.Range(0,100);
+                if (coinpick < 5)
+                {
+                    Vector3 Pos = new Vector3(i, j, 0);
+                    GameObject backgroundTile = Instantiate(TilePrefab, Pos, Quaternion.identity) as GameObject;
+                    backgroundTile.name = "( " + i + ", " + j + " )";
 
-                GameObject popable = Instantiate(PopablesPrefab[pickRand], Pos, Quaternion.identity) as GameObject;
-                popable.name = "( " + i + ", " + j + " )";
-                Popables[i, j] = popable;
+                    GameObject popable = Instantiate(CoinPrefab, Pos, Quaternion.identity) as GameObject;
+                    popable.name = "( " + i + ", " + j + " )";
+                    Popables[i, j] = popable;
+                }
+                else
+                {
+                    Vector3 Pos = new Vector3(i, j, 0);
+                    GameObject backgroundTile = Instantiate(TilePrefab, Pos, Quaternion.identity) as GameObject;
+                    backgroundTile.name = "( " + i + ", " + j + " )";
+                    int pickRand = Random.Range(0, PopablesPrefab.Length);
+
+                    GameObject popable = Instantiate(PopablesPrefab[pickRand], Pos, Quaternion.identity) as GameObject;
+                    popable.name = "( " + i + ", " + j + " )";
+                    Popables[i, j] = popable;
+                }
             }
         }
     }
 
     public void Match(int row, int column)
     {
-            Popables[column, row].GetComponent<Collapse>().matched = true;
+        try
+        {
+            if (Popables[column, row].CompareTag("Coin"))
+            {
+                return;
+            }
+        }
+        catch { }
+        Popables[column, row].GetComponent<Collapse>().matched = true;
+
+        try
+        {
+            Popables[column, row - 1].GetComponent<Collapse>().isMatch(Popables[column, row]);
+        }
+        catch { }
+
+        try
+        {
+            Popables[column, row + 1].GetComponent<Collapse>().isMatch(Popables[column, row]);
+        }
+        catch { }
+
+        try
+        {
+            Popables[column - 1, row].GetComponent<Collapse>().isMatch(Popables[column, row]);
+        }
+        catch { }
+
+        try
+        {
+            Popables[column + 1, row].GetComponent<Collapse>().isMatch(Popables[column, row]);
+        }
+        catch { }
+
+
+        if (withDiagonal)
+        {
             try
             {
-                Popables[column, row - 1].GetComponent<Collapse>().isMatch(Popables[column, row]);
+                Popables[column + 1, row + 1].GetComponent<Collapse>().isMatch(Popables[column, row]);
             }
             catch { }
 
             try
             {
-                Popables[column, row + 1].GetComponent<Collapse>().isMatch(Popables[column, row]);
+                Popables[column + 1, row - 1].GetComponent<Collapse>().isMatch(Popables[column, row]);
             }
             catch { }
 
             try
             {
-                Popables[column - 1, row].GetComponent<Collapse>().isMatch(Popables[column, row]);
+                Popables[column - 1, row + 1].GetComponent<Collapse>().isMatch(Popables[column, row]);
             }
             catch { }
 
             try
             {
-                Popables[column + 1, row].GetComponent<Collapse>().isMatch(Popables[column, row]);
+                Popables[column - 1, row - 1].GetComponent<Collapse>().isMatch(Popables[column, row]);
             }
             catch { }
+        }
     }
 
     private void DestroyMatchesAt(int column, int row)
@@ -155,6 +208,16 @@ public class CollapseBoard : MonoBehaviour
     {
         for(int k = 0; k < width; k++)
         {
+            try
+            {
+                if (Popables[k, 0].CompareTag("Coin"))
+                {
+                    Popables[k, 0].GetComponent<Collapse>().matched = true;
+                    DestroyMatches();
+                    coinsCollected++;
+                }
+            }
+            catch { }
             if (Popables[k,0] == null)
             {
                 for(int i=k-1;i>-1;i--)

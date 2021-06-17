@@ -10,6 +10,7 @@ public class CollapseBoard : MonoBehaviour
     private int numbOfBlocksPoped;
     public GameObject CoinPrefab;
     public GameObject TilePrefab;
+    public GameObject ObstaclePrefab;
     public GameObject[] PopablesPrefab;
     private BackgroundTile[,] board;
     public GameObject[,] Popables;
@@ -33,7 +34,13 @@ public class CollapseBoard : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Match((int)Mathf.Round(mousePos.y), (int)Mathf.Round(mousePos.x));
+            try
+            {
+                if (!Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)].CompareTag("Obstacle")){
+                    Match((int)Mathf.Round(mousePos.y), (int)Mathf.Round(mousePos.x));
+                }
+            }
+            catch { }
             DestroyMatches();
             if(numbOfBlocksPoped > 2 && numbOfBlocksPoped < 5)
             {
@@ -67,6 +74,15 @@ public class CollapseBoard : MonoBehaviour
                     backgroundTile.name = "( " + i + ", " + j + " )";
 
                     GameObject popable = Instantiate(CoinPrefab, Pos, Quaternion.identity) as GameObject;
+                    popable.name = "( " + i + ", " + j + " )";
+                    Popables[i, j] = popable;
+                }else if( coinpick>5 && coinpick < 7)
+                {
+                    Vector3 Pos = new Vector3(i, j, 0);
+                    GameObject backgroundTile = Instantiate(TilePrefab, Pos, Quaternion.identity) as GameObject;
+                    backgroundTile.name = "( " + i + ", " + j + " )";
+
+                    GameObject popable = Instantiate(ObstaclePrefab, Pos, Quaternion.identity) as GameObject;
                     popable.name = "( " + i + ", " + j + " )";
                     Popables[i, j] = popable;
                 }

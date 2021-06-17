@@ -15,6 +15,7 @@ TagManager:
   - BluePyramid
   - RedEyesBox
   - Obstacle
+  - Coin
   layers:
   - Default
   - TransparentFX

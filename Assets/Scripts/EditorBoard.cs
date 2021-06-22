@@ -95,6 +95,12 @@ public class EditorBoard : MonoBehaviour
                 numbOfBlocksPoped = 0;
             }
         }
+        if(Input.GetMouseButton(1) && editMode)
+        {
+            mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Destroy(Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)]);
+            Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)] = null;
+        }
     }
 
     private void Create_Board()

@@ -1,22 +1,23 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CollapseBoard : MonoBehaviour
+public class EditorBoard : MonoBehaviour
 {
     public int width;
     public int height;
     public int Score;
     private int numbOfBlocksPoped;
-    public GameObject CoinPrefab;
     public GameObject TilePrefab;
-    public GameObject ObstaclePrefab;
-    public GameObject[] PopablesPrefab;
+    public GameObject[] SelectablesPrefabs;
     private BackgroundTile[,] board;
     public GameObject[,] Popables;
     private Vector2 mousePos;
     public int coinsCollected;
     private bool withDiagonal = false;
+    private int selectedObject;
+    public bool editMode = true;
 
     void Start()
     {
@@ -34,29 +35,62 @@ public class CollapseBoard : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            try
+            if (mousePos.y < 0)
             {
-                if (!Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)].CompareTag("Obstacle")){
-                    Match((int)Mathf.Round(mousePos.y), (int)Mathf.Round(mousePos.x));
+                RaycastHit2D selectHit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+                if (selectHit.collider != null)
+                {
+                    for (int i = 0; i < SelectablesPrefabs.Length; i++)
+                    {
+                        if (selectHit.collider.gameObject.CompareTag(SelectablesPrefabs[i].tag))
+                        {
+                            selectedObject = i;
+                            Debug.Log("Selected " + SelectablesPrefabs[selectedObject].tag);
+                        }
+                    }
                 }
+            }else if (editMode)
+                {
+                if ((mousePos.x <= width && mousePos.y <= height) && (mousePos.x >= 0 && mousePos.y >= 0))
+                {
+                    if (Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)] == null)
+                    {
+                        Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)] = Instantiate(SelectablesPrefabs[selectedObject], new Vector2((int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)), Quaternion.identity);
+                        Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)].name = "( " + (int)Mathf.Round(mousePos.x) + " " + (int)Mathf.Round(mousePos.y) + " )";
+                        Debug.Log("Placed Object");
+                    }
+                }
+                }
+                else
+                {
+                    try
+                    {
+                        if (!Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)].CompareTag("Obstacle"))
+                        {
+                            Match((int)Mathf.Round(mousePos.y), (int)Mathf.Round(mousePos.x));
+                        }
+                    }
+                    catch { Debug.Log("Error at trying to match"); }
+
+                    DestroyMatches();
+                    if (numbOfBlocksPoped > 2 && numbOfBlocksPoped < 5)
+                    {
+                        Score += 10 * numbOfBlocksPoped;
+                    }
+                    else if (numbOfBlocksPoped >= 5 && numbOfBlocksPoped < 8)
+                    {
+                        Score += 20 * numbOfBlocksPoped;
+                    }
+                    else if (numbOfBlocksPoped <= 2 && numbOfBlocksPoped > 0)
+                    {
+                        Score -= 50;
+                    }
+                    else
+                    {
+                        Score += 30 * numbOfBlocksPoped;
+                    }
+                    numbOfBlocksPoped = 0;
             }
-            catch { }
-            DestroyMatches();
-            if(numbOfBlocksPoped > 2 && numbOfBlocksPoped < 5)
-            {
-                Score += 10 * numbOfBlocksPoped;
-            }else if(numbOfBlocksPoped >= 5 && numbOfBlocksPoped < 8)
-            {
-                Score += 20 * numbOfBlocksPoped;
-            }else if(numbOfBlocksPoped <= 2 && numbOfBlocksPoped > 0)
-            {
-                Score -= 50;
-            }
-            else
-            {
-                Score += 30 * numbOfBlocksPoped;
-            }
-            numbOfBlocksPoped = 0;
         }
     }
 
@@ -66,37 +100,9 @@ public class CollapseBoard : MonoBehaviour
         {
             for (int j = 0; j < height; j++)
             {
-                int coinpick = Random.Range(0,100);
-                if (coinpick < 5)
-                {
-                    Vector3 Pos = new Vector3(i, j, 0);
-                    GameObject backgroundTile = Instantiate(TilePrefab, Pos, Quaternion.identity) as GameObject;
-                    backgroundTile.name = "( " + i + ", " + j + " )";
-
-                    GameObject popable = Instantiate(CoinPrefab, Pos, Quaternion.identity) as GameObject;
-                    popable.name = "( " + i + ", " + j + " )";
-                    Popables[i, j] = popable;
-                }else if( coinpick>5 && coinpick < 7)
-                {
-                    Vector3 Pos = new Vector3(i, j, 0);
-                    GameObject backgroundTile = Instantiate(TilePrefab, Pos, Quaternion.identity) as GameObject;
-                    backgroundTile.name = "( " + i + ", " + j + " )";
-
-                    GameObject popable = Instantiate(ObstaclePrefab, Pos, Quaternion.identity) as GameObject;
-                    popable.name = "( " + i + ", " + j + " )";
-                    Popables[i, j] = popable;
-                }
-                else
-                {
-                    Vector3 Pos = new Vector3(i, j, 0);
-                    GameObject backgroundTile = Instantiate(TilePrefab, Pos, Quaternion.identity) as GameObject;
-                    backgroundTile.name = "( " + i + ", " + j + " )";
-                    int pickRand = Random.Range(0, PopablesPrefab.Length);
-
-                    GameObject popable = Instantiate(PopablesPrefab[pickRand], Pos, Quaternion.identity) as GameObject;
-                    popable.name = "( " + i + ", " + j + " )";
-                    Popables[i, j] = popable;
-                }
+                Vector3 Pos = new Vector3(i, j, 0);
+                GameObject backgroundTile = Instantiate(TilePrefab, Pos, Quaternion.identity) as GameObject;
+                backgroundTile.name = "( " + i + ", " + j + " )";
             }
         }
     }
@@ -124,7 +130,6 @@ public class CollapseBoard : MonoBehaviour
             Popables[column, row + 1].GetComponent<Collapse>().isMatch(Popables[column, row]);
         }
         catch { }
-
         try
         {
             Popables[column - 1, row].GetComponent<Collapse>().isMatch(Popables[column, row]);
@@ -217,12 +222,12 @@ public class CollapseBoard : MonoBehaviour
             }
         }
         yield return new WaitForSeconds(.4f);
-        
+
     }
 
     private IEnumerator DecreaseColumnCoroutine()
     {
-        for(int k = 0; k < width; k++)
+        for (int k = 0; k < width; k++)
         {
             try
             {
@@ -232,7 +237,7 @@ public class CollapseBoard : MonoBehaviour
                     DestroyMatches();
                     coinsCollected++;
                 }
-                if(Popables[k, 1].CompareTag("Coin") && Popables[k, 0].CompareTag("Obstacle"))
+                if (Popables[k, 1].CompareTag("Coin") && Popables[k, 0].CompareTag("Obstacle"))
                 {
                     Popables[k, 1].GetComponent<Collapse>().matched = true;
                     DestroyMatches();
@@ -240,17 +245,17 @@ public class CollapseBoard : MonoBehaviour
                 }
             }
             catch { }
-            if (Popables[k,0] == null)
+            if (Popables[k, 0] == null)
             {
-                for(int i=k-1;i>-1;i--)
+                for (int i = k - 1; i > -1; i--)
                 {
-                    for(int j=0; j < height; j++)
+                    for (int j = 0; j < height; j++)
                     {
-                        if(Popables[i, j] != null)
+                        if (Popables[i, j] != null)
                         {
                             Popables[i, j].GetComponent<Collapse>().column += 1;
-                            Popables[i + 1 , j] = Popables[i, j];
-                            Popables[i + 1 , j].transform.position = new Vector2(Popables[i, j].GetComponent<Collapse>().column, Popables[i, j].GetComponent<Collapse>().row);
+                            Popables[i + 1, j] = Popables[i, j];
+                            Popables[i + 1, j].transform.position = new Vector2(Popables[i, j].GetComponent<Collapse>().column, Popables[i, j].GetComponent<Collapse>().row);
                             Popables[i + 1, j].tag = Popables[i, j].tag;
                             Popables[i, j] = null;
                         }
@@ -260,5 +265,4 @@ public class CollapseBoard : MonoBehaviour
         }
         yield return new WaitForSeconds(.6f);
     }
-
 }

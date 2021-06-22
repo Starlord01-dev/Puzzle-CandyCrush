@@ -9,4 +9,9 @@ public class ChangeEdit_Play : MonoBehaviour
     {
         FindObjectOfType<EditorBoard>().editMode= !FindObjectOfType<EditorBoard>().editMode;
     }
+
+    public void Destroy_Object()
+    {
+        FindObjectOfType<EditorBoard>().destroy = !FindObjectOfType<EditorBoard>().destroy;
+    }
 }

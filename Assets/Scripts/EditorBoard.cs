@@ -22,6 +22,7 @@ public class EditorBoard : MonoBehaviour
     private Vector2 mousePos;
 
     public bool editMode = true;
+    public bool destroy = false;
     
 
     void Start()
@@ -55,13 +56,20 @@ public class EditorBoard : MonoBehaviour
                 }
             }else if (editMode)
                 {
-                if (((int)Mathf.Round(mousePos.x) < width+1 && (int)Mathf.Round(mousePos.y) < height+1))
+                if (!destroy)
                 {
-                    if (Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)] == null)
+                    if (((int)Mathf.Round(mousePos.x) < width + 1 && (int)Mathf.Round(mousePos.y) < height + 1))
                     {
-                        Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)] = Instantiate(SelectablesPrefabs[selectedObject], new Vector2((int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)), Quaternion.identity);
-                        Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)].name = "( " + (int)Mathf.Round(mousePos.x) + " " + (int)Mathf.Round(mousePos.y) + " )";
+                        if (Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)] == null)
+                        {
+                            Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)] = Instantiate(SelectablesPrefabs[selectedObject], new Vector2((int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)), Quaternion.identity);
+                            Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)].name = "( " + (int)Mathf.Round(mousePos.x) + " " + (int)Mathf.Round(mousePos.y) + " )";
+                        }
                     }
+                }else if (destroy)
+                {
+                    Destroy(Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)]);
+                    Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)] = null;
                 }
                 }
                 else
@@ -94,12 +102,6 @@ public class EditorBoard : MonoBehaviour
                 }
                 numbOfBlocksPoped = 0;
             }
-        }
-        if(Input.GetMouseButton(1) && editMode)
-        {
-            mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Destroy(Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)]);
-            Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)] = null;
         }
     }
 

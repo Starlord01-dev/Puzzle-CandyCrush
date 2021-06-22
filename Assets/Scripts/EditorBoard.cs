@@ -2,25 +2,36 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class EditorBoard : MonoBehaviour
 {
     public int width;
     public int height;
+    public int Score;
+    private int numbOfBlocksPoped;
+    public int coinsCollected;
+    private int selectedObject;
+
     public GameObject TilePrefab;
     public GameObject[] SelectablesPrefabs;
     private BackgroundTile[,] board;
     public GameObject[,] Popables;
+
     private Vector2 mousePos;
-    private int selectedObject;
+
     public bool editMode = true;
+    
 
     void Start()
     {
         board = new BackgroundTile[width, height];
         Popables = new GameObject[width, height];
+        numbOfBlocksPoped = 0;
+        Score = 0;
+        coinsCollected = 0;
         Create_Board();
-
     }
 
     private void Update()
@@ -65,6 +76,23 @@ public class EditorBoard : MonoBehaviour
                     catch { Debug.Log("Error at trying to match"); }
 
                     DestroyMatches();
+                if (numbOfBlocksPoped > 2 && numbOfBlocksPoped < 5)
+                {
+                    Score += 10 * numbOfBlocksPoped;
+                }
+                else if (numbOfBlocksPoped >= 5 && numbOfBlocksPoped < 8)
+                {
+                    Score += 20 * numbOfBlocksPoped;
+                }
+                else if (numbOfBlocksPoped <= 2 && numbOfBlocksPoped > 0)
+                {
+                    Score -= 50;
+                }
+                else
+                {
+                    Score += 30 * numbOfBlocksPoped;
+                }
+                numbOfBlocksPoped = 0;
             }
         }
     }
@@ -84,6 +112,7 @@ public class EditorBoard : MonoBehaviour
 
     public void Match(int row, int column)
     {
+
         Popables[column, row].GetComponent<EditorCollaps>().matched = true;
         try
         {
@@ -117,6 +146,7 @@ public class EditorBoard : MonoBehaviour
         {
             Destroy(Popables[column, row]);
             Popables[column, row] = null;
+            numbOfBlocksPoped++;
         }
     }
 
@@ -168,6 +198,22 @@ public class EditorBoard : MonoBehaviour
     {
         for (int k = 0; k < width; k++)
         {
+            try
+            {
+                if (Popables[k, 0].CompareTag("Coin"))
+                {
+                    Popables[k, 0].GetComponent<EditorCollaps>().matched = true;
+                    DestroyMatches();
+                    coinsCollected++;
+                }
+                if (Popables[k, 1].CompareTag("Coin") && Popables[k, 0].CompareTag("Obstacle"))
+                {
+                    Popables[k, 1].GetComponent<EditorCollaps>().matched = true;
+                    DestroyMatches();
+                    coinsCollected++;
+                }
+            }
+            catch { }
             if (Popables[k, 0] == null)
             {
                 for (int i = k - 1; i > -1; i--)
@@ -188,4 +234,5 @@ public class EditorBoard : MonoBehaviour
         }
         yield return new WaitForSeconds(.6f);
     }
+
 }

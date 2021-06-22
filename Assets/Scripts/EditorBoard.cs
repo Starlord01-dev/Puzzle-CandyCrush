@@ -7,15 +7,11 @@ public class EditorBoard : MonoBehaviour
 {
     public int width;
     public int height;
-    public int Score;
-    private int numbOfBlocksPoped;
     public GameObject TilePrefab;
     public GameObject[] SelectablesPrefabs;
     private BackgroundTile[,] board;
     public GameObject[,] Popables;
     private Vector2 mousePos;
-    public int coinsCollected;
-    private bool withDiagonal = false;
     private int selectedObject;
     public bool editMode = true;
 
@@ -23,9 +19,6 @@ public class EditorBoard : MonoBehaviour
     {
         board = new BackgroundTile[width, height];
         Popables = new GameObject[width, height];
-        numbOfBlocksPoped = 0;
-        Score = 0;
-        coinsCollected = 0;
         Create_Board();
 
     }
@@ -51,13 +44,12 @@ public class EditorBoard : MonoBehaviour
                 }
             }else if (editMode)
                 {
-                if ((mousePos.x <= width && mousePos.y <= height) && (mousePos.x >= 0 && mousePos.y >= 0))
+                if (((int)Mathf.Round(mousePos.x) < width+1 && (int)Mathf.Round(mousePos.y) < height+1))
                 {
                     if (Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)] == null)
                     {
                         Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)] = Instantiate(SelectablesPrefabs[selectedObject], new Vector2((int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)), Quaternion.identity);
                         Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)].name = "( " + (int)Mathf.Round(mousePos.x) + " " + (int)Mathf.Round(mousePos.y) + " )";
-                        Debug.Log("Placed Object");
                     }
                 }
                 }
@@ -65,7 +57,7 @@ public class EditorBoard : MonoBehaviour
                 {
                     try
                     {
-                        if (!Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)].CompareTag("Obstacle"))
+                        if (!Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)].CompareTag("Obstacle") && !Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)].CompareTag("Coin"))
                         {
                             Match((int)Mathf.Round(mousePos.y), (int)Mathf.Round(mousePos.x));
                         }
@@ -73,23 +65,6 @@ public class EditorBoard : MonoBehaviour
                     catch { Debug.Log("Error at trying to match"); }
 
                     DestroyMatches();
-                    if (numbOfBlocksPoped > 2 && numbOfBlocksPoped < 5)
-                    {
-                        Score += 10 * numbOfBlocksPoped;
-                    }
-                    else if (numbOfBlocksPoped >= 5 && numbOfBlocksPoped < 8)
-                    {
-                        Score += 20 * numbOfBlocksPoped;
-                    }
-                    else if (numbOfBlocksPoped <= 2 && numbOfBlocksPoped > 0)
-                    {
-                        Score -= 50;
-                    }
-                    else
-                    {
-                        Score += 30 * numbOfBlocksPoped;
-                    }
-                    numbOfBlocksPoped = 0;
             }
         }
     }
@@ -109,75 +84,39 @@ public class EditorBoard : MonoBehaviour
 
     public void Match(int row, int column)
     {
+        Popables[column, row].GetComponent<EditorCollaps>().matched = true;
         try
         {
-            if (Popables[column, row].CompareTag("Coin"))
-            {
-                return;
-            }
-        }
-        catch { }
-        Popables[column, row].GetComponent<Collapse>().matched = true;
-
-        try
-        {
-            Popables[column, row - 1].GetComponent<Collapse>().isMatch(Popables[column, row]);
+            Popables[column, row - 1].GetComponent<EditorCollaps>().isMatch(Popables[column, row]);
         }
         catch { }
 
         try
         {
-            Popables[column, row + 1].GetComponent<Collapse>().isMatch(Popables[column, row]);
+            Popables[column, row + 1].GetComponent<EditorCollaps>().isMatch(Popables[column, row]);
         }
         catch { }
         try
         {
-            Popables[column - 1, row].GetComponent<Collapse>().isMatch(Popables[column, row]);
+            Popables[column - 1, row].GetComponent<EditorCollaps>().isMatch(Popables[column, row]);
         }
         catch { }
 
         try
         {
-            Popables[column + 1, row].GetComponent<Collapse>().isMatch(Popables[column, row]);
+            Popables[column + 1, row].GetComponent<EditorCollaps>().isMatch(Popables[column, row]);
         }
         catch { }
 
 
-        if (withDiagonal)
-        {
-            try
-            {
-                Popables[column + 1, row + 1].GetComponent<Collapse>().isMatch(Popables[column, row]);
-            }
-            catch { }
-
-            try
-            {
-                Popables[column + 1, row - 1].GetComponent<Collapse>().isMatch(Popables[column, row]);
-            }
-            catch { }
-
-            try
-            {
-                Popables[column - 1, row + 1].GetComponent<Collapse>().isMatch(Popables[column, row]);
-            }
-            catch { }
-
-            try
-            {
-                Popables[column - 1, row - 1].GetComponent<Collapse>().isMatch(Popables[column, row]);
-            }
-            catch { }
-        }
     }
 
     private void DestroyMatchesAt(int column, int row)
     {
-        if (Popables[column, row].GetComponent<Collapse>().matched)
+        if (Popables[column, row].GetComponent<EditorCollaps>().matched)
         {
             Destroy(Popables[column, row]);
             Popables[column, row] = null;
-            numbOfBlocksPoped++;
         }
     }
 
@@ -189,7 +128,7 @@ public class EditorBoard : MonoBehaviour
             {
                 if (Popables[i, j] != null)
                 {
-                    if (Popables[i, j].GetComponent<Collapse>().matched)
+                    if (Popables[i, j].GetComponent<EditorCollaps>().matched)
                     {
                         DestroyMatchesAt(i, j);
                     }
@@ -213,9 +152,9 @@ public class EditorBoard : MonoBehaviour
                 }
                 else if (nullCount > 0)
                 {
-                    Popables[i, j].GetComponent<Collapse>().row -= nullCount;
+                    Popables[i, j].GetComponent<EditorCollaps>().row -= nullCount;
                     Popables[i, j - nullCount] = Popables[i, j];
-                    Popables[i, j - nullCount].transform.position = new Vector2(Popables[i, j].GetComponent<Collapse>().column, Popables[i, j].GetComponent<Collapse>().row);
+                    Popables[i, j - nullCount].transform.position = new Vector2(Popables[i, j].GetComponent<EditorCollaps>().column, Popables[i, j].GetComponent<EditorCollaps>().row);
                     Popables[i, j - nullCount].tag = Popables[i, j].tag;
                     Popables[i, j] = null;
                 }
@@ -229,22 +168,6 @@ public class EditorBoard : MonoBehaviour
     {
         for (int k = 0; k < width; k++)
         {
-            try
-            {
-                if (Popables[k, 0].CompareTag("Coin"))
-                {
-                    Popables[k, 0].GetComponent<Collapse>().matched = true;
-                    DestroyMatches();
-                    coinsCollected++;
-                }
-                if (Popables[k, 1].CompareTag("Coin") && Popables[k, 0].CompareTag("Obstacle"))
-                {
-                    Popables[k, 1].GetComponent<Collapse>().matched = true;
-                    DestroyMatches();
-                    coinsCollected++;
-                }
-            }
-            catch { }
             if (Popables[k, 0] == null)
             {
                 for (int i = k - 1; i > -1; i--)
@@ -253,9 +176,9 @@ public class EditorBoard : MonoBehaviour
                     {
                         if (Popables[i, j] != null)
                         {
-                            Popables[i, j].GetComponent<Collapse>().column += 1;
+                            Popables[i, j].GetComponent<EditorCollaps>().column += 1;
                             Popables[i + 1, j] = Popables[i, j];
-                            Popables[i + 1, j].transform.position = new Vector2(Popables[i, j].GetComponent<Collapse>().column, Popables[i, j].GetComponent<Collapse>().row);
+                            Popables[i + 1, j].transform.position = new Vector2(Popables[i, j].GetComponent<EditorCollaps>().column, Popables[i, j].GetComponent<EditorCollaps>().row);
                             Popables[i + 1, j].tag = Popables[i, j].tag;
                             Popables[i, j] = null;
                         }

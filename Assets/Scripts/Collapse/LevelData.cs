@@ -6,6 +6,7 @@ using UnityEngine;
 [System.Serializable]
 public class LevelData
 {
+    public string levelId;
     public int width;
     public int height;
     public int score;
@@ -25,6 +26,7 @@ public class LevelData
         coinsCollected = board.coinsCollected;
         editMode = board.editMode;
         destroy = board.destroy;
+        levelId = board.CurrentBoardId;
 
     Databoard = new int[width, height];
 

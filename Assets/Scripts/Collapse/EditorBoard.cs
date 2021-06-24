@@ -7,6 +7,9 @@ using TMPro;
 
 public class EditorBoard : MonoBehaviour
 {
+    public string CurrentBoardId;
+    public string LoadBoardId;
+    public string path;
     public int width;
     public int height;
     public int Score;
@@ -254,7 +257,7 @@ public class EditorBoard : MonoBehaviour
 
     public void LoadBoard()
     {
-        LevelData data = SaveSystem.LoadLevel();
+        LevelData data = SaveSystem.LoadLevel(this);
 
         width = data.width;
         height = data.height;
@@ -262,6 +265,7 @@ public class EditorBoard : MonoBehaviour
         coinsCollected = data.coinsCollected;
         editMode = data.editMode;
         destroy = data.destroy;
+        CurrentBoardId = data.levelId;
 
 
         for(int i = 0; i < width; i++)
@@ -319,6 +323,17 @@ public class EditorBoard : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void SetCurrentId(string input)
+    {
+        CurrentBoardId = input;
+        Debug.Log(CurrentBoardId);
+    }
+
+    public void SetLoadId(string input)
+    {
+        LoadBoardId = input;
     }
 
 }

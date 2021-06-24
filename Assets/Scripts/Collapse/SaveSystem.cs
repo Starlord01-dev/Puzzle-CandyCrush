@@ -1,25 +1,37 @@
 using System.IO;
 using UnityEngine;
 using System.Runtime.Serialization.Formatters.Binary;
+using System;
+using System.Collections.Generic;
 
 public static class SaveSystem
 {
+    private static List<string> SaveBoards = new List<string>();
+
     public static void SaveBoard(EditorBoard board)
     {
-        BinaryFormatter formatter = new BinaryFormatter();
-        string path = Application.persistentDataPath + "/board.collapse";
-        FileStream stream = new FileStream(path, FileMode.Create);
+        if (!SaveBoards.Contains(board.CurrentBoardId))
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            string path = board.path + "\\Assets\\Maps" + "/board" + board.CurrentBoardId + ".collapse";
+            FileStream stream = new FileStream(path, FileMode.Create);
 
-        LevelData data = new LevelData(board);
+            LevelData data = new LevelData(board);
 
-        formatter.Serialize(stream, data);
-        stream.Close();
+            formatter.Serialize(stream, data);
+            stream.Close();
+            SaveBoards.Add(board.CurrentBoardId);
+        }
+        else
+        {
+            Debug.LogError("This Id alredy exists");
+        }
 
     }
 
-    public static LevelData LoadLevel()
+    public static LevelData LoadLevel(EditorBoard board)
     {
-        string path = Application.persistentDataPath + "/board.collapse";
+        string path = board.path + "\\Assets\\Maps" + "/board" + board.LoadBoardId + ".collapse";
         if (File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();

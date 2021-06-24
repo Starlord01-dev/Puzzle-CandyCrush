@@ -1,19 +1,32 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+
 [System.Serializable]
 public class LevelData
 {
-    int width;
-    int height;
-    int[,] Databoard;
+    public int width;
+    public int height;
+    public int score;
+    public int coinsCollected;
+    public int[,] Databoard;
+    public bool editMode;
+    public bool destroy;
+    /*public GameObject TilePrefab;
+    public GameObject[] SelectablesPrefabs;
+    private BackgroundTile[,] board;*/
 
-    LevelData(EditorBoard board)
+    public LevelData(EditorBoard board)
     {
         width = board.width;
         height = board.height;
+        score = board.Score;
+        coinsCollected = board.coinsCollected;
+        editMode = board.editMode;
+        destroy = board.destroy;
 
-        Databoard = new int[width, height];
+    Databoard = new int[width, height];
 
         for(int i = 0; i< board.width; i++)
         {
@@ -24,10 +37,10 @@ public class LevelData
                     case "BlueEyesBall":
                         Databoard[i, j] = 1;
                         break;
-                    case "RedEyesBox":
+                    case "BluePyramid":
                         Databoard[i, j] = 2;
                         break;
-                    case "PyramidBlue":
+                    case "RedEyesBox":
                         Databoard[i, j] = 3;
                         break;
                     case "Coin":
@@ -35,6 +48,9 @@ public class LevelData
                         break;
                     case "Obstacle":
                         Databoard[i, j] = -1;
+                        break;
+                    default:
+                        Debug.LogError("Couldn't match " + board.Popables[i, j].tag + " with an existing tag");
                         break;
                 }
             }

@@ -60,11 +60,15 @@ public class EditorBoard : MonoBehaviour
                 {
                     if (((int)Mathf.Round(mousePos.x) < width + 1 && (int)Mathf.Round(mousePos.y) < height + 1))
                     {
-                        if (Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)] == null)
+                        try
                         {
-                            Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)] = Instantiate(SelectablesPrefabs[selectedObject], new Vector2((int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)), Quaternion.identity);
-                            Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)].name = "( " + (int)Mathf.Round(mousePos.x) + " " + (int)Mathf.Round(mousePos.y) + " )";
+                            if (Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)] == null)
+                            {
+                                Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)] = Instantiate(SelectablesPrefabs[selectedObject], new Vector2((int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)), Quaternion.identity);
+                                Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)].name = "( " + (int)Mathf.Round(mousePos.x) + " " + (int)Mathf.Round(mousePos.y) + " )";
+                            }
                         }
+                        catch { }
                     }
                 }else if (destroy)
                 {
@@ -241,6 +245,80 @@ public class EditorBoard : MonoBehaviour
             }
         }
         yield return new WaitForSeconds(.6f);
+    }
+
+    public void SaveBoard()
+    {
+        SaveSystem.SaveBoard(this);
+    }
+
+    public void LoadBoard()
+    {
+        LevelData data = SaveSystem.LoadLevel();
+
+        width = data.width;
+        height = data.height;
+        Score = data.score;
+        coinsCollected = data.coinsCollected;
+        editMode = data.editMode;
+        destroy = data.destroy;
+
+
+        for(int i = 0; i < width; i++)
+        {
+            for(int j = 0; j < height; j++)
+            {
+                for(int k = 0; k < SelectablesPrefabs.Length; k++)
+                {
+                    switch (data.Databoard[i, j])
+                    {
+                        case 1:
+                            try
+                            {
+                                Destroy(Popables[i, j]);
+                            }
+                            catch { }
+                            Popables[i, j] = Instantiate(SelectablesPrefabs[0], new Vector2(i, j), Quaternion.identity);
+                            break;
+                        case 2:
+                            try
+                            {
+                                Destroy(Popables[i, j]);
+                            }
+                            catch { }
+                            Popables[i, j] = Instantiate(SelectablesPrefabs[1], new Vector2(i, j), Quaternion.identity);
+                            break;
+                        case 3:
+                            try
+                            {
+                                Destroy(Popables[i, j]);
+                            }
+                            catch { }
+                            Popables[i, j] = Instantiate(SelectablesPrefabs[2], new Vector2(i, j), Quaternion.identity);
+                            break;
+                        case -1:
+                            try
+                            {
+                                Destroy(Popables[i, j]);
+                            }
+                            catch { }
+                            Popables[i, j] = Instantiate(SelectablesPrefabs[3], new Vector2(i, j), Quaternion.identity);
+                            break;
+                        case 0:
+                            try
+                            {
+                                Destroy(Popables[i, j]);
+                            }
+                            catch { }
+                            Popables[i, j] = Instantiate(SelectablesPrefabs[4], new Vector2(i, j), Quaternion.identity);
+                            break;
+                        default:
+                            Debug.LogError("Couldn't instatiate object.");
+                            break;
+                    }
+                }
+            }
+        }
     }
 
 }

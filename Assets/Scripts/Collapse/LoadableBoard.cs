@@ -19,6 +19,74 @@ public class LoadableBoard : MonoBehaviour
 
     private Vector2 mousePos;
 
+    private void Start()
+    {
+        LoadBoardId = GameManager.instance.LevelId;
+        LevelData data = SaveSystem.LoadLevel(LoadBoardId, path);
+
+        width = data.width;
+        height = data.height;
+        Popables = new GameObject[width, height];
+        Score = data.score;
+        coinsCollected = data.coinsCollected;
+
+
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                for (int k = 0; k < SelectablesPrefabs.Length; k++)
+                {
+                    switch (data.Databoard[i, j])
+                    {
+                        case 1:
+                            try
+                            {
+                                Destroy(Popables[i, j]);
+                            }
+                            catch { }
+                            Popables[i, j] = Instantiate(SelectablesPrefabs[0], new Vector2(i, j), Quaternion.identity);
+                            break;
+                        case 2:
+                            try
+                            {
+                                Destroy(Popables[i, j]);
+                            }
+                            catch { }
+                            Popables[i, j] = Instantiate(SelectablesPrefabs[1], new Vector2(i, j), Quaternion.identity);
+                            break;
+                        case 3:
+                            try
+                            {
+                                Destroy(Popables[i, j]);
+                            }
+                            catch { }
+                            Popables[i, j] = Instantiate(SelectablesPrefabs[2], new Vector2(i, j), Quaternion.identity);
+                            break;
+                        case -1:
+                            try
+                            {
+                                Destroy(Popables[i, j]);
+                            }
+                            catch { }
+                            Popables[i, j] = Instantiate(SelectablesPrefabs[3], new Vector2(i, j), Quaternion.identity);
+                            break;
+                        case 0:
+                            try
+                            {
+                                Destroy(Popables[i, j]);
+                            }
+                            catch { }
+                            Popables[i, j] = Instantiate(SelectablesPrefabs[4], new Vector2(i, j), Quaternion.identity);
+                            break;
+                        default:
+                            Debug.LogError("Couldn't instatiate object.");
+                            break;
+                    }
+                }
+            }
+        }
+    }
 
     private void Update()
     {
@@ -32,7 +100,7 @@ public class LoadableBoard : MonoBehaviour
                         Match((int)Mathf.Round(mousePos.y), (int)Mathf.Round(mousePos.x));
                     }
                 }
-                catch { Debug.Log("Error at trying to match"); }
+                catch { }
 
                 DestroyMatches();
                 if (numbOfBlocksPoped > 2 && numbOfBlocksPoped < 5)
@@ -180,79 +248,15 @@ public class LoadableBoard : MonoBehaviour
         yield return new WaitForSeconds(.6f);
     }
 
-
-    public void LoadBoard()
-    {
-        LevelData data = SaveSystem.LoadLevel(this);
-
-        width = data.width;
-        height = data.height;
-        Popables = new GameObject[width, height];
-        Score = data.score;
-        coinsCollected = data.coinsCollected;
-
-
-        for (int i = 0; i < width; i++)
-        {
-            for (int j = 0; j < height; j++)
-            {
-                for (int k = 0; k < SelectablesPrefabs.Length; k++)
-                {
-                    switch (data.Databoard[i, j])
-                    {
-                        case 1:
-                            try
-                            {
-                                Destroy(Popables[i, j]);
-                            }
-                            catch { }
-                            Popables[i, j] = Instantiate(SelectablesPrefabs[0], new Vector2(i, j), Quaternion.identity);
-                            break;
-                        case 2:
-                            try
-                            {
-                                Destroy(Popables[i, j]);
-                            }
-                            catch { }
-                            Popables[i, j] = Instantiate(SelectablesPrefabs[1], new Vector2(i, j), Quaternion.identity);
-                            break;
-                        case 3:
-                            try
-                            {
-                                Destroy(Popables[i, j]);
-                            }
-                            catch { }
-                            Popables[i, j] = Instantiate(SelectablesPrefabs[2], new Vector2(i, j), Quaternion.identity);
-                            break;
-                        case -1:
-                            try
-                            {
-                                Destroy(Popables[i, j]);
-                            }
-                            catch { }
-                            Popables[i, j] = Instantiate(SelectablesPrefabs[3], new Vector2(i, j), Quaternion.identity);
-                            break;
-                        case 0:
-                            try
-                            {
-                                Destroy(Popables[i, j]);
-                            }
-                            catch { }
-                            Popables[i, j] = Instantiate(SelectablesPrefabs[4], new Vector2(i, j), Quaternion.identity);
-                            break;
-                        default:
-                            Debug.LogError("Couldn't instatiate object.");
-                            break;
-                    }
-                }
-            }
-        }
-    }
-
     public void SetLoadBoardId(string id)
     {
         LoadBoardId = id;
     }
 
-        
+    public string GetLoadBoardId()
+    {
+        return LoadBoardId;
+    }
+
+
 }

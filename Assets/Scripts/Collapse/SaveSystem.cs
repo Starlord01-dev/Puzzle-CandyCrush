@@ -51,7 +51,28 @@ public static class SaveSystem
 
     public static LevelData LoadLevel(LoadableBoard board)
     {
-        string path = board.path + "\\Assets\\Maps" + "/board" + board.LoadBoardId + ".collapse";
+        string loadBoardId = board.GetLoadBoardId();
+        string path = board.path + "\\Assets\\Maps" + "/board" + loadBoardId + ".collapse";
+        if (File.Exists(path))
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            FileStream stream = new FileStream(path, FileMode.Open);
+
+            LevelData data = formatter.Deserialize(stream) as LevelData;
+            stream.Close();
+
+            return data;
+        }
+        else
+        {
+            Debug.LogError("Board not found in " + path);
+            return null;
+        }
+    }
+
+    public static LevelData LoadLevel(string LevelId, string Boardpath)
+    {
+        string path = Boardpath + "\\Assets\\Maps" + "/board" + LevelId + ".collapse";
         if (File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();

@@ -14,4 +14,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/LoadedBoard.unity
     guid: 2670dd434cff8d44291d73cb5f49c9cb
+  - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: af79883b98464874ba60c82f46ac81c1
+  - enabled: 1
+    path: Assets/Scenes/Sandbox.unity
+    guid: 6762d8f9868b71e48aef3c9bff0af462
+  - enabled: 1
+    path: Assets/Scenes/Casual.unity
+    guid: e3dff557e63f9b94bb3b785f93ae0932
   m_configObjects: {}

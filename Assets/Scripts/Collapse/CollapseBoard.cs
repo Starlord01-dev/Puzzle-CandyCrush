@@ -36,8 +36,12 @@ public class CollapseBoard : MonoBehaviour
             mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             try
             {
-                if (!Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)].CompareTag("Obstacle")){
-                    Match((int)Mathf.Round(mousePos.y), (int)Mathf.Round(mousePos.x));
+                if ((int)Mathf.Round(mousePos.x) < width && (int)Mathf.Round(mousePos.y) < height)
+                {
+                    if (!Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)].CompareTag("Obstacle") && !Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)].CompareTag("Coin"))
+                    {
+                        Match((int)Mathf.Round(mousePos.y), (int)Mathf.Round(mousePos.x));
+                    }
                 }
             }
             catch { }
@@ -103,14 +107,7 @@ public class CollapseBoard : MonoBehaviour
 
     public void Match(int row, int column)
     {
-        try
-        {
-            if (Popables[column, row].CompareTag("Coin"))
-            {
-                return;
-            }
-        }
-        catch { }
+
         Popables[column, row].GetComponent<Collapse>().matched = true;
 
         try

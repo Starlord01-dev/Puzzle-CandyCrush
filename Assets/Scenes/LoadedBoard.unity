@@ -202,7 +202,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 1, g: 1, b: 1, a: 0}
+  m_BackGroundColor: {r: 0.18560877, g: 0.37128162, b: 0.4056604, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -386,11 +386,30 @@ MonoBehaviour:
   coinsCollected: 0
   TilePrefab: {fileID: 4953703130050031505, guid: 7ed27404236cd344898907c4b80bf22d, type: 3}
   SelectablesPrefabs:
-  - {fileID: 1223485493395111564, guid: fe64e43f5c45f5e4c9ec900c306c28c8, type: 3}
-  - {fileID: 7165651318133325183, guid: 417c3eb7829017e4593d09fb75d65cf5, type: 3}
-  - {fileID: 6829498881162233700, guid: 1718e3024dbf3d142bb7c52d1bc9523f, type: 3}
   - {fileID: 1467310598669642209, guid: a6a5bdd1a1159e343bc1d5c4792d813c, type: 3}
   - {fileID: 3609475269272644765, guid: 378b678c7fdbfe34aaf26637e1dcdfc2, type: 3}
+  - {fileID: 4636979755147615766, guid: 7e183444799b0794eab79eefc1e6a2a5, type: 3}
+  - {fileID: 4405051970694954416, guid: 7634e53e1becf0a4d966ea00ffd94c2e, type: 3}
+  - {fileID: 8619811133826743878, guid: 96238c063af11d745a056f70adddb25f, type: 3}
+  - {fileID: 6058758984045126665, guid: 3794b340f8cf0394f98e0e7d28b4a550, type: 3}
+  - {fileID: 4060499051742164939, guid: b809e2a58b95806419f2b86ec322245c, type: 3}
+  - {fileID: 1352777634685862292, guid: bdcc68e5fd75d2e4b8914f59268fac40, type: 3}
+  - {fileID: 1062894328587984944, guid: aa5e8c03b1d63c046aa725a8d79a69df, type: 3}
+  - {fileID: 7319699308406893259, guid: af3444dcf9dc1614dac3c0f10a5f210b, type: 3}
+  - {fileID: 8358107598961267693, guid: 1890602238e2ccc4eb166b6edd53aee9, type: 3}
+  - {fileID: 1480525401796087023, guid: 62bf68b564c717248a310c3a195f3f6c, type: 3}
+  - {fileID: 751313633432127437, guid: 3bb91fd71862c2942ac38bf6d82bd997, type: 3}
+  - {fileID: 8139171831715294971, guid: b4e73162a583ea140afbe82669609d88, type: 3}
+  - {fileID: 7406105129618528050, guid: 13a3ec591e8e8664193a567bf375c6e5, type: 3}
+  - {fileID: 4134169050697027901, guid: cfc30a37aa7f35e45b5f979c71f62acf, type: 3}
+  - {fileID: 7736845661544082460, guid: bd34008b5ad4f894a8ffe4fb2a047873, type: 3}
+  - {fileID: 7718745071470458789, guid: 8431a41e83b2c574a8b27abf8e201008, type: 3}
+  - {fileID: 7737333797349392605, guid: b95323a7c820d4f4597ac2b48f1582ed, type: 3}
+  - {fileID: 6744721313683837344, guid: 85c85a3c8b5af814d96a83e7e597f716, type: 3}
+  - {fileID: 8163881401547487900, guid: 558a21c5988125547a7d5fed09970f28, type: 3}
+  - {fileID: 7262298308458960262, guid: 8ed75ab26802eba43af7d0f5694d60ee, type: 3}
+  - {fileID: 1488386387485222685, guid: 5c6f3313fce12114b930b85beaa73fd5, type: 3}
+  - {fileID: 5956678367701324946, guid: 299a533370b82094d9120e894db07222, type: 3}
 --- !u!4 &1545070818
 Transform:
   m_ObjectHideFlags: 0

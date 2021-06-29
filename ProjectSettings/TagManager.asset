@@ -4,18 +4,30 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Ball
-  - Diamond
-  - Heart
-  - MellonSquare
-  - PyramidHead
-  - Star
-  - Triangle
-  - BlueEyesBall
-  - BluePyramid
-  - RedEyesBox
-  - Obstacle
   - Coin
+  - Obstacle
+  - Yellow
+  - Purple
+  - Magenta
+  - Green
+  - Beige
+  - BlancSalle
+  - NeonBlue
+  - Orange
+  - Grey
+  - Lavander
+  - Lime
+  - Pink
+  - White
+  - Turquoise
+  - NavyBlue
+  - Bordaux
+  - Brown
+  - Grass
+  - Red
+  - Black
+  - Blue
+  - SkyBlue
   layers:
   - Default
   - TransparentFX

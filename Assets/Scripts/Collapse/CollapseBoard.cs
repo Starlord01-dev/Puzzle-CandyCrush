@@ -36,16 +36,14 @@ public class CollapseBoard : MonoBehaviour
             mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             try
             {
-                if ((int)Mathf.Round(mousePos.x) < width && (int)Mathf.Round(mousePos.y) < height)
-                {
-                    if (!Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)].CompareTag("Obstacle") && !Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)].CompareTag("Coin"))
+                if (!Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)].CompareTag("Obstacle") && !Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)].CompareTag("Coin"))
                     {
                         Match((int)Mathf.Round(mousePos.y), (int)Mathf.Round(mousePos.x));
-                    }
+                    DestroyMatches();
                 }
             }
             catch { }
-            DestroyMatches();
+            
             if(numbOfBlocksPoped > 2 && numbOfBlocksPoped < 5)
             {
                 Score += 10 * numbOfBlocksPoped;

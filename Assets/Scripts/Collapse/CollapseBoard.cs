@@ -165,6 +165,7 @@ public class CollapseBoard : MonoBehaviour
     {
         if (Popables[column, row].GetComponent<Collapse>().matched)
         {
+            StartCoroutine(Popables[column, row].GetComponent<Collapse>().Play_Explosion());
             Destroy(Popables[column, row]);
             Popables[column, row] = null;
             numbOfBlocksPoped++;

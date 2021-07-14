@@ -99,6 +99,7 @@ MonoBehaviour:
   column: 0
   row: 0
   matched: 0
+  PopPrefab: {fileID: 8966286055762443654, guid: cfbcf3686012d8c43bd962115ba7ec97, type: 3}
 --- !u!61 &-2735191560111213275
 BoxCollider2D:
   m_ObjectHideFlags: 0

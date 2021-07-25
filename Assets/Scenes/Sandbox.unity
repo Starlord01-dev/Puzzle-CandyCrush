@@ -1937,6 +1937,63 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1192428851}
   m_CullTransparentMesh: 1
+--- !u!1 &1198976933
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1198976936}
+  - component: {fileID: 1198976935}
+  - component: {fileID: 1198976934}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1198976934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1198976933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ffe97f1d702f3e44b8375a6d4d81f96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  setPath: D:\Unity\CandyCrush\Puzzle-CandyCrush
+--- !u!114 &1198976935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1198976933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cca99b8ae8211f4984ac7827aa6cd56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1198976936
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1198976933}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 505.40002, y: 220.70001, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 28
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1206890559
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2322,7 +2379,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 1, g: 1, b: 1, a: 0}
+  m_BackGroundColor: {r: 0.41598436, g: 0.593084, b: 0.7169812, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -3000,11 +3057,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CurrentBoardId: 
   LoadBoardId: 
-  path: E:\Unity Projects\Puzzle-rip-candy-crush
+  path: 
   width: 8
   height: 12
   Score: 0
   coinsCollected: 0
+  Explode: {fileID: 6725470013643259030, guid: ae08d60e86b5c5146b7bd428ff5dc569, type: 3}
   TilePrefab: {fileID: 8128358480886258754, guid: 3dfc23481ff35cc4e96ac06caf27bd7a, type: 3}
   SelectablesPrefabs:
   - {fileID: 192092733764380749, guid: 22d863e845a7c41448bf3e3057dfc19b, type: 3}
@@ -3015,6 +3073,14 @@ MonoBehaviour:
   - {fileID: 3329701869869075540, guid: 32416eca646c385499de383523f72c91, type: 3}
   - {fileID: 7709540268772071306, guid: 860d40c3686accf4297babd81ea645f4, type: 3}
   - {fileID: 8563301570805952841, guid: 77a9b9269557c034ab85a5c6f65e6c7f, type: 3}
+  - {fileID: 3639373342627782455, guid: ed5828902871cd74c8373dcec3a37437, type: 3}
+  - {fileID: 6802572832913206863, guid: b6054dafdbff45f4ea9d3e5ab96495a6, type: 3}
+  - {fileID: 4806980135972363399, guid: cdebc187c6209f540a6fdb2601dd1698, type: 3}
+  - {fileID: 4456627512503829, guid: 9f94b680718b96a4ebbb05a406d39498, type: 3}
+  - {fileID: 3979763782828103633, guid: a5b1fb622570acd49915bb44cc537445, type: 3}
+  - {fileID: 7466788223208133715, guid: 54b4a97c9251b81478b28a06fdb3bf74, type: 3}
+  - {fileID: 870488516366486742, guid: db8a8d5823aba734b9dc9c21a9356d66, type: 3}
+  - {fileID: 6008859555375143664, guid: 2909afd930d634d4490ea48d429cbb33, type: 3}
   - {fileID: 7112674146071419190, guid: 480048ed0803c7443ba6bd038f79a1f9, type: 3}
   - {fileID: 4093742367867335157, guid: 6732eebe1fc9ddc4baec36ad81d8a93d, type: 3}
   - {fileID: 9116915234086088688, guid: 355c1ac9ea7be494aa8c34201f1f58b0, type: 3}
@@ -3023,14 +3089,6 @@ MonoBehaviour:
   - {fileID: 407700737902749642, guid: 4fa3704ac6f8ca744abe1da2cf86a897, type: 3}
   - {fileID: 2424932229546311928, guid: b7fa7305e307ec24ca671c51299c08cc, type: 3}
   - {fileID: 7386295253106066750, guid: f19d7b1858c3c3f49929c2d19d39b741, type: 3}
-  - {fileID: 6008859555375143664, guid: 2909afd930d634d4490ea48d429cbb33, type: 3}
-  - {fileID: 3639373342627782455, guid: ed5828902871cd74c8373dcec3a37437, type: 3}
-  - {fileID: 6802572832913206863, guid: b6054dafdbff45f4ea9d3e5ab96495a6, type: 3}
-  - {fileID: 4806980135972363399, guid: cdebc187c6209f540a6fdb2601dd1698, type: 3}
-  - {fileID: 4456627512503829, guid: 9f94b680718b96a4ebbb05a406d39498, type: 3}
-  - {fileID: 3979763782828103633, guid: a5b1fb622570acd49915bb44cc537445, type: 3}
-  - {fileID: 7466788223208133715, guid: 54b4a97c9251b81478b28a06fdb3bf74, type: 3}
-  - {fileID: 870488516366486742, guid: db8a8d5823aba734b9dc9c21a9356d66, type: 3}
   editMode: 1
   destroy: 0
 --- !u!4 &1799174529

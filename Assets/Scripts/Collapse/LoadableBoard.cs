@@ -21,6 +21,7 @@ public class LoadableBoard : MonoBehaviour
 
     private void Start()
     {
+        path = GameManager.instance.Path;
         LoadBoardId = GameManager.instance.LevelId;
         LevelData data = SaveSystem.LoadLevel(LoadBoardId, path);
 

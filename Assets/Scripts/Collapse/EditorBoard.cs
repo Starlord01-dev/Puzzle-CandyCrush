@@ -42,7 +42,7 @@ public class EditorBoard : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetKey(KeyCode.Mouse0))
         {
             mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             if (mousePos.y < 0)
@@ -70,6 +70,12 @@ public class EditorBoard : MonoBehaviour
                         {
                             if (Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)] == null)
                             {
+                                Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)] = Instantiate(SelectablesPrefabs[selectedObject], new Vector2((int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)), Quaternion.identity);
+                                Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)].name = "( " + (int)Mathf.Round(mousePos.x) + " " + (int)Mathf.Round(mousePos.y) + " )";
+                            }
+                            else
+                            {
+                                Destroy(Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)]);
                                 Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)] = Instantiate(SelectablesPrefabs[selectedObject], new Vector2((int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)), Quaternion.identity);
                                 Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)].name = "( " + (int)Mathf.Round(mousePos.x) + " " + (int)Mathf.Round(mousePos.y) + " )";
                             }
@@ -280,6 +286,14 @@ public class EditorBoard : MonoBehaviour
             {
                 switch (data.Databoard[i, j])
                 {
+                    case -1:
+                        try
+                        {
+                            Destroy(Popables[i, j]);
+                        }
+                        catch { }
+                        Popables[i, j] = null;
+                        break;
                     case 0:
                         try
                         {
@@ -489,6 +503,22 @@ public class EditorBoard : MonoBehaviour
     public void SetLoadId(string input)
     {
         LoadBoardId = input;
+    }
+
+
+    public void ClearBoard()
+    {
+        for(int i = 0; i < width; i++)
+        {
+            for(int j = 0; j < height; j++)
+            {
+                if (Popables[i, j] != null)
+                {
+                    Destroy(Popables[i, j]);
+                    Popables[i, j] = null;
+                }
+            }
+        }
     }
 
 

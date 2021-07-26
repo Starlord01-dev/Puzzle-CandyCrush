@@ -41,6 +41,14 @@ public class LoadableBoard : MonoBehaviour
                 {
                     switch (data.Databoard[i, j])
                     {
+                        case -1:
+                            try
+                            {
+                                Destroy(Popables[i, j]);
+                            }
+                            catch { }
+                            Popables[i, j] = null;
+                            break;
                         case 0:
                             try
                             {
@@ -420,7 +428,7 @@ public class LoadableBoard : MonoBehaviour
         ParticleSystem.MainModule mainMod = tempExplosion.GetComponent<ParticleSystem>().main;
         mainMod.startColor = tempColor;
         tempExplosion.GetComponent<ParticleSystem>().Play();
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(3);
         Destroy(tempExplosion);
     }
 

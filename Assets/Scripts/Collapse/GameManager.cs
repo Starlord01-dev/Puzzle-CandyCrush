@@ -22,5 +22,7 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        Path = Application.dataPath;
     }
 }

@@ -155,6 +155,7 @@ MonoBehaviour:
   width: 16
   height: 20
   Score: 0
+  Explode: {fileID: 6725470013643259030, guid: ae08d60e86b5c5146b7bd428ff5dc569, type: 3}
   CoinPrefab: {fileID: 3074026191198791006, guid: 97dae05b450e96b47b6878025b2b6f71, type: 3}
   TilePrefab: {fileID: 4913898172927107794, guid: 3975bbd25fa0c59459c9ebd83e784ea2, type: 3}
   ObstaclePrefab: {fileID: 3310448406030996911, guid: f5f7fea8c4de9e34bb2e06bbcce4340e, type: 3}

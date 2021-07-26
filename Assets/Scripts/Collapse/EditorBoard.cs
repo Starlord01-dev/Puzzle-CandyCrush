@@ -73,6 +73,12 @@ public class EditorBoard : MonoBehaviour
                                 Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)] = Instantiate(SelectablesPrefabs[selectedObject], new Vector2((int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)), Quaternion.identity);
                                 Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)].name = "( " + (int)Mathf.Round(mousePos.x) + " " + (int)Mathf.Round(mousePos.y) + " )";
                             }
+                            else
+                            {
+                                Destroy(Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)]);
+                                Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)] = Instantiate(SelectablesPrefabs[selectedObject], new Vector2((int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)), Quaternion.identity);
+                                Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)].name = "( " + (int)Mathf.Round(mousePos.x) + " " + (int)Mathf.Round(mousePos.y) + " )";
+                            }
                         }
                         catch { }
                     }
@@ -489,6 +495,22 @@ public class EditorBoard : MonoBehaviour
     public void SetLoadId(string input)
     {
         LoadBoardId = input;
+    }
+
+
+    public void ClearBoard()
+    {
+        for(int i = 0; i < width; i++)
+        {
+            for(int j = 0; j < height; j++)
+            {
+                if (Popables[i, j] != null)
+                {
+                    Destroy(Popables[i, j]);
+                    Popables[i, j] = null;
+                }
+            }
+        }
     }
 
 

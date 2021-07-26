@@ -13,7 +13,6 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        Debug.Log(Application.dataPath);
         if (instance == null)
         {
             instance = this;

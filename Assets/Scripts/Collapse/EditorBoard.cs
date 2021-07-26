@@ -42,7 +42,7 @@ public class EditorBoard : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetKey(KeyCode.Mouse0))
         {
             mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             if (mousePos.y < 0)

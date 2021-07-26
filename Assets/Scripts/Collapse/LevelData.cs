@@ -28,7 +28,7 @@ public class LevelData
         destroy = board.destroy;
         levelId = board.CurrentBoardId;
 
-    Databoard = new int[width, height];
+        Databoard = new int[width, height];
 
         for(int i = 0; i< board.width; i++)
         {

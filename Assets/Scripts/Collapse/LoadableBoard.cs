@@ -13,6 +13,7 @@ public class LoadableBoard : MonoBehaviour
     public int coinsCollected;
 
     public GameObject TilePrefab;
+    public GameObject Explode;
     private BackgroundTile[,] board;
     public GameObject[,] Popables;
     public GameObject[] SelectablesPrefabs;
@@ -21,6 +22,7 @@ public class LoadableBoard : MonoBehaviour
 
     private void Start()
     {
+        path = GameManager.instance.Path;
         LoadBoardId = GameManager.instance.LevelId;
         LevelData data = SaveSystem.LoadLevel(LoadBoardId, path);
 
@@ -307,8 +309,10 @@ public class LoadableBoard : MonoBehaviour
 
     private void DestroyMatchesAt(int column, int row)
     {
+        Color tempColor = Popables[column, row].GetComponent<SpriteRenderer>().color;
         if (Popables[column, row].GetComponent<LoadCollapse>().matched)
         {
+            StartCoroutine(StartExplosion(column, row, tempColor));
             Destroy(Popables[column, row]);
             Popables[column, row] = null;
             numbOfBlocksPoped++;
@@ -410,5 +414,14 @@ public class LoadableBoard : MonoBehaviour
         return LoadBoardId;
     }
 
+    IEnumerator StartExplosion(float x, float y, Color tempColor)
+    {
+        GameObject tempExplosion = Instantiate(Explode, new Vector2(x, y), Quaternion.identity);
+        ParticleSystem.MainModule mainMod = tempExplosion.GetComponent<ParticleSystem>().main;
+        mainMod.startColor = tempColor;
+        tempExplosion.GetComponent<ParticleSystem>().Play();
+        yield return new WaitForSeconds(0.2f);
+        Destroy(tempExplosion);
+    }
 
 }

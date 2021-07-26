@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
 
     public string LevelId { get; set; }
 
+    public string Path { get; set; }
+
     private void Awake()
     {
         if (instance == null)

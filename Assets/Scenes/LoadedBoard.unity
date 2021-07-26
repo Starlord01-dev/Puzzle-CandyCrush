@@ -384,7 +384,9 @@ MonoBehaviour:
   height: 0
   Score: 0
   coinsCollected: 0
-  TilePrefab: {fileID: 4953703130050031505, guid: 7ed27404236cd344898907c4b80bf22d, type: 3}
+  TilePrefab: {fileID: 4953703130050031505, guid: 7ed27404236cd344898907c4b80bf22d,
+    type: 3}
+  Explode: {fileID: 6725470013643259030, guid: ae08d60e86b5c5146b7bd428ff5dc569, type: 3}
   SelectablesPrefabs:
   - {fileID: 1467310598669642209, guid: a6a5bdd1a1159e343bc1d5c4792d813c, type: 3}
   - {fileID: 3609475269272644765, guid: 378b678c7fdbfe34aaf26637e1dcdfc2, type: 3}

@@ -17,6 +17,7 @@ public class EditorBoard : MonoBehaviour
     public int coinsCollected;
     private int selectedObject;
 
+    public GameObject Explode;
     public GameObject TilePrefab;
     public GameObject[] SelectablesPrefabs;
     private BackgroundTile[,] board;
@@ -26,10 +27,11 @@ public class EditorBoard : MonoBehaviour
 
     public bool editMode = true;
     public bool destroy = false;
-    
+
 
     void Start()
     {
+        path = GameManager.instance.Path;
         board = new BackgroundTile[width, height];
         Popables = new GameObject[width, height];
         numbOfBlocksPoped = 0;
@@ -57,8 +59,9 @@ public class EditorBoard : MonoBehaviour
                         }
                     }
                 }
-            }else if (editMode)
-                {
+            }
+            else if (editMode)
+            {
                 if (!destroy)
                 {
                     if (((int)Mathf.Round(mousePos.x) < width + 1 && (int)Mathf.Round(mousePos.y) < height + 1))
@@ -73,24 +76,25 @@ public class EditorBoard : MonoBehaviour
                         }
                         catch { }
                     }
-                }else if (destroy)
+                }
+                else if (destroy)
                 {
                     Destroy(Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)]);
                     Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)] = null;
                 }
-                }
-                else
+            }
+            else
+            {
+                try
                 {
-                    try
+                    if (!Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)].CompareTag("Obstacle") && !Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)].CompareTag("Coin"))
                     {
-                        if (!Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)].CompareTag("Obstacle") && !Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)].CompareTag("Coin"))
-                        {
-                            Match((int)Mathf.Round(mousePos.y), (int)Mathf.Round(mousePos.x));
-                        }
+                        Match((int)Mathf.Round(mousePos.y), (int)Mathf.Round(mousePos.x));
                     }
-                    catch { Debug.Log("Error at trying to match"); }
+                }
+                catch { Debug.Log("Error at trying to match"); }
 
-                    DestroyMatches();
+                DestroyMatches();
                 if (numbOfBlocksPoped > 2 && numbOfBlocksPoped < 5)
                 {
                     Score += 10 * numbOfBlocksPoped;
@@ -157,8 +161,10 @@ public class EditorBoard : MonoBehaviour
 
     private void DestroyMatchesAt(int column, int row)
     {
+        Color tempColor = Popables[column, row].GetComponent<SpriteRenderer>().color;
         if (Popables[column, row].GetComponent<EditorCollaps>().matched)
         {
+            StartCoroutine(StartExplosion(column, row, tempColor));
             Destroy(Popables[column, row]);
             Popables[column, row] = null;
             numbOfBlocksPoped++;
@@ -268,58 +274,207 @@ public class EditorBoard : MonoBehaviour
         CurrentBoardId = data.levelId;
 
 
-        for(int i = 0; i < width; i++)
+        for (int i = 0; i < width; i++)
         {
-            for(int j = 0; j < height; j++)
+            for (int j = 0; j < height; j++)
             {
-                for(int k = 0; k < SelectablesPrefabs.Length; k++)
+                switch (data.Databoard[i, j])
                 {
-                    switch (data.Databoard[i, j])
-                    {
-                        case 1:
-                            try
-                            {
-                                Destroy(Popables[i, j]);
-                            }
-                            catch { }
-                            Popables[i, j] = Instantiate(SelectablesPrefabs[0], new Vector2(i, j), Quaternion.identity);
-                            break;
-                        case 2:
-                            try
-                            {
-                                Destroy(Popables[i, j]);
-                            }
-                            catch { }
-                            Popables[i, j] = Instantiate(SelectablesPrefabs[1], new Vector2(i, j), Quaternion.identity);
-                            break;
-                        case 3:
-                            try
-                            {
-                                Destroy(Popables[i, j]);
-                            }
-                            catch { }
-                            Popables[i, j] = Instantiate(SelectablesPrefabs[2], new Vector2(i, j), Quaternion.identity);
-                            break;
-                        case -1:
-                            try
-                            {
-                                Destroy(Popables[i, j]);
-                            }
-                            catch { }
-                            Popables[i, j] = Instantiate(SelectablesPrefabs[3], new Vector2(i, j), Quaternion.identity);
-                            break;
-                        case 0:
-                            try
-                            {
-                                Destroy(Popables[i, j]);
-                            }
-                            catch { }
-                            Popables[i, j] = Instantiate(SelectablesPrefabs[4], new Vector2(i, j), Quaternion.identity);
-                            break;
-                        default:
-                            Debug.LogError("Couldn't instatiate object.");
-                            break;
-                    }
+                    case 0:
+                        try
+                        {
+                            Destroy(Popables[i, j]);
+                        }
+                        catch { }
+                        Popables[i, j] = Instantiate(SelectablesPrefabs[0], new Vector2(i, j), Quaternion.identity);
+                        break;
+                    case 1:
+                        try
+                        {
+                            Destroy(Popables[i, j]);
+                        }
+                        catch { }
+                        Popables[i, j] = Instantiate(SelectablesPrefabs[1], new Vector2(i, j), Quaternion.identity);
+                        break;
+                    case 2:
+                        try
+                        {
+                            Destroy(Popables[i, j]);
+                        }
+                        catch { }
+                        Popables[i, j] = Instantiate(SelectablesPrefabs[2], new Vector2(i, j), Quaternion.identity);
+                        break;
+                    case 3:
+                        try
+                        {
+                            Destroy(Popables[i, j]);
+                        }
+                        catch { }
+                        Popables[i, j] = Instantiate(SelectablesPrefabs[3], new Vector2(i, j), Quaternion.identity);
+                        break;
+                    case 4:
+                        try
+                        {
+                            Destroy(Popables[i, j]);
+                        }
+                        catch { }
+                        Popables[i, j] = Instantiate(SelectablesPrefabs[4], new Vector2(i, j), Quaternion.identity);
+                        break;
+                    case 5:
+                        try
+                        {
+                            Destroy(Popables[i, j]);
+                        }
+                        catch { }
+                        Popables[i, j] = Instantiate(SelectablesPrefabs[5], new Vector2(i, j), Quaternion.identity);
+                        break;
+                    case 6:
+                        try
+                        {
+                            Destroy(Popables[i, j]);
+                        }
+                        catch { }
+                        Popables[i, j] = Instantiate(SelectablesPrefabs[6], new Vector2(i, j), Quaternion.identity);
+                        break;
+                    case 7:
+                        try
+                        {
+                            Destroy(Popables[i, j]);
+                        }
+                        catch { }
+                        Popables[i, j] = Instantiate(SelectablesPrefabs[7], new Vector2(i, j), Quaternion.identity);
+                        break;
+                    case 8:
+                        try
+                        {
+                            Destroy(Popables[i, j]);
+                        }
+                        catch { }
+                        Popables[i, j] = Instantiate(SelectablesPrefabs[8], new Vector2(i, j), Quaternion.identity);
+                        break;
+                    case 9:
+                        try
+                        {
+                            Destroy(Popables[i, j]);
+                        }
+                        catch { }
+                        Popables[i, j] = Instantiate(SelectablesPrefabs[9], new Vector2(i, j), Quaternion.identity);
+                        break;
+                    case 10:
+                        try
+                        {
+                            Destroy(Popables[i, j]);
+                        }
+                        catch { }
+                        Popables[i, j] = Instantiate(SelectablesPrefabs[10], new Vector2(i, j), Quaternion.identity);
+                        break;
+                    case 11:
+                        try
+                        {
+                            Destroy(Popables[i, j]);
+                        }
+                        catch { }
+                        Popables[i, j] = Instantiate(SelectablesPrefabs[11], new Vector2(i, j), Quaternion.identity);
+                        break;
+                    case 12:
+                        try
+                        {
+                            Destroy(Popables[i, j]);
+                        }
+                        catch { }
+                        Popables[i, j] = Instantiate(SelectablesPrefabs[12], new Vector2(i, j), Quaternion.identity);
+                        break;
+                    case 13:
+                        try
+                        {
+                            Destroy(Popables[i, j]);
+                        }
+                        catch { }
+                        Popables[i, j] = Instantiate(SelectablesPrefabs[13], new Vector2(i, j), Quaternion.identity);
+                        break;
+                    case 14:
+                        try
+                        {
+                            Destroy(Popables[i, j]);
+                        }
+                        catch { }
+                        Popables[i, j] = Instantiate(SelectablesPrefabs[1], new Vector2(i, j), Quaternion.identity);
+                        break;
+                    case 15:
+                        try
+                        {
+                            Destroy(Popables[i, j]);
+                        }
+                        catch { }
+                        Popables[i, j] = Instantiate(SelectablesPrefabs[15], new Vector2(i, j), Quaternion.identity);
+                        break;
+                    case 16:
+                        try
+                        {
+                            Destroy(Popables[i, j]);
+                        }
+                        catch { }
+                        Popables[i, j] = Instantiate(SelectablesPrefabs[16], new Vector2(i, j), Quaternion.identity);
+                        break;
+                    case 17:
+                        try
+                        {
+                            Destroy(Popables[i, j]);
+                        }
+                        catch { }
+                        Popables[i, j] = Instantiate(SelectablesPrefabs[17], new Vector2(i, j), Quaternion.identity);
+                        break;
+                    case 18:
+                        try
+                        {
+                            Destroy(Popables[i, j]);
+                        }
+                        catch { }
+                        Popables[i, j] = Instantiate(SelectablesPrefabs[18], new Vector2(i, j), Quaternion.identity);
+                        break;
+                    case 19:
+                        try
+                        {
+                            Destroy(Popables[i, j]);
+                        }
+                        catch { }
+                        Popables[i, j] = Instantiate(SelectablesPrefabs[19], new Vector2(i, j), Quaternion.identity);
+                        break;
+                    case 20:
+                        try
+                        {
+                            Destroy(Popables[i, j]);
+                        }
+                        catch { }
+                        Popables[i, j] = Instantiate(SelectablesPrefabs[20], new Vector2(i, j), Quaternion.identity);
+                        break;
+                    case 21:
+                        try
+                        {
+                            Destroy(Popables[i, j]);
+                        }
+                        catch { }
+                        Popables[i, j] = Instantiate(SelectablesPrefabs[21], new Vector2(i, j), Quaternion.identity);
+                        break;
+                    case 22:
+                        try
+                        {
+                            Destroy(Popables[i, j]);
+                        }
+                        catch { }
+                        Popables[i, j] = Instantiate(SelectablesPrefabs[22], new Vector2(i, j), Quaternion.identity);
+                        break;
+                    case 23:
+                        try
+                        {
+                            Destroy(Popables[i, j]);
+                        }
+                        catch { }
+                        Popables[i, j] = Instantiate(SelectablesPrefabs[23], new Vector2(i, j), Quaternion.identity);
+                        break;
+                    default:
+                        Debug.LogError("Couldn't instatiate object.");
+                        break;
                 }
             }
         }
@@ -334,6 +489,17 @@ public class EditorBoard : MonoBehaviour
     public void SetLoadId(string input)
     {
         LoadBoardId = input;
+    }
+
+
+    IEnumerator StartExplosion(float x, float y, Color tempColor)
+    {
+        GameObject tempExplosion = Instantiate(Explode, new Vector2(x, y), Quaternion.identity);
+        ParticleSystem.MainModule mainMod = tempExplosion.GetComponent<ParticleSystem>().main;
+        mainMod.startColor = tempColor;
+        tempExplosion.GetComponent<ParticleSystem>().Play();
+        yield return new WaitForSeconds(0.2f);
+        Destroy(tempExplosion);
     }
 
 }

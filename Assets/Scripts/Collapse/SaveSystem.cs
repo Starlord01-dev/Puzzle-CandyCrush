@@ -13,7 +13,7 @@ public static class SaveSystem
         if (!SaveBoards.Contains(board.CurrentBoardId))
         {
             BinaryFormatter formatter = new BinaryFormatter();
-            string path = board.path + "\\Assets\\Maps" + "/board" + board.CurrentBoardId + ".collapse";
+            string path = GameManager.instance.Path + "\\Assets\\Maps" + "\\board" + board.CurrentBoardId + ".collapse";
             FileStream stream = new FileStream(path, FileMode.Create);
 
             LevelData data = new LevelData(board);
@@ -31,7 +31,7 @@ public static class SaveSystem
 
     public static LevelData LoadLevel(EditorBoard board)
     {
-        string path = board.path + "\\Assets\\Maps" + "/board" + board.LoadBoardId + ".collapse";
+        string path = GameManager.instance.Path + "\\Assets\\Maps" + "\\board" + board.LoadBoardId + ".collapse";
         if (File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();
@@ -52,7 +52,7 @@ public static class SaveSystem
     public static LevelData LoadLevel(LoadableBoard board)
     {
         string loadBoardId = board.GetLoadBoardId();
-        string path = board.path + "\\Assets\\Maps" + "/board" + loadBoardId + ".collapse";
+        string path = GameManager.instance.Path + "\\Assets\\Maps" + "\\board" + loadBoardId + ".collapse";
         if (File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();
@@ -72,7 +72,7 @@ public static class SaveSystem
 
     public static LevelData LoadLevel(string LevelId, string Boardpath)
     {
-        string path = Boardpath + "\\Assets\\Maps" + "/board" + LevelId + ".collapse";
+        string path = Boardpath + "\\Assets\\Maps" + "\\board" + LevelId + ".collapse";
         if (File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();

@@ -286,6 +286,14 @@ public class EditorBoard : MonoBehaviour
             {
                 switch (data.Databoard[i, j])
                 {
+                    case -1:
+                        try
+                        {
+                            Destroy(Popables[i, j]);
+                        }
+                        catch { }
+                        Popables[i, j] = null;
+                        break;
                     case 0:
                         try
                         {

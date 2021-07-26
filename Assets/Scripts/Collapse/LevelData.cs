@@ -44,71 +44,86 @@ public class LevelData
                         case "Coin":
                             Databoard[i, j] = 1;
                             break;
-                        case "Beige":
+                        case "White":
                             Databoard[i, j] = 2;
                             break;
-                        case "Black":
+                        case "Red":
                             Databoard[i, j] = 3;
                             break;
-                        case "BlancSalle":
+                        case "LightRed":
                             Databoard[i, j] = 4;
                             break;
-                        case "Blue":
+                        case "DarkRed":
                             Databoard[i, j] = 5;
                             break;
-                        case "Bordaux":
+                        case "Blue":
                             Databoard[i, j] = 6;
                             break;
-                        case "Brown":
+                        case "LightBlue":
                             Databoard[i, j] = 7;
                             break;
-                        case "White":
+                        case "DarkBlue":
                             Databoard[i, j] = 8;
                             break;
-                        case "Turquoise":
+                        case "Green":
                             Databoard[i, j] = 9;
                             break;
-                        case "SkyBlue":
+                        case "LightGreen":
                             Databoard[i, j] = 10;
                             break;
-                        case "Red":
+                        case "DarkGreen":
                             Databoard[i, j] = 11;
                             break;
-                        case "Purple":
+                        case "Yellow":
                             Databoard[i, j] = 12;
                             break;
-                        case "Pink":
+                        case "LightYellow":
                             Databoard[i, j] = 13;
                             break;
-                        case "Orange":
+                        case "DarkYellow":
                             Databoard[i, j] = 14;
                             break;
-                        case "Yellow":
+                        case "Orange":
                             Databoard[i, j] = 15;
                             break;
-                        case "Grass":
+                        case "LightOrange":
                             Databoard[i, j] = 16;
                             break;
-                        case "Green":
+                        case "DarkOrange":
                             Databoard[i, j] = 17;
                             break;
-                        case "Grey":
+                        case "Brown":
                             Databoard[i, j] = 18;
                             break;
-                        case "Lavander":
+                        case "LightBrown":
                             Databoard[i, j] = 19;
                             break;
-                        case "Lime":
+                        case "DarkBrown":
                             Databoard[i, j] = 20;
                             break;
-                        case "Magenta":
+                        case "Purple":
                             Databoard[i, j] = 21;
                             break;
-                        case "NavyBlue":
+                        case "LightPurple":
                             Databoard[i, j] = 22;
                             break;
-                        case "NeonBlue":
+                        case "DarkPurple":
                             Databoard[i, j] = 23;
+                            break;
+                        case "Pink":
+                            Databoard[i, j] = 24;
+                            break;
+                        case "LightPink":
+                            Databoard[i, j] = 25;
+                            break;
+                        case "DarkPink":
+                            Databoard[i, j] = 26;
+                            break;
+                        case "Grey":
+                            Databoard[i, j] = 27;
+                            break;
+                        case "Black":
+                            Databoard[i, j] = 28;
                             break;
                         default:
                             Debug.LogError("Couldn't match " + board.Popables[i, j].tag + " with an existing tag");

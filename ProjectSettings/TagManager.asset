@@ -6,28 +6,33 @@ TagManager:
   tags:
   - Coin
   - Obstacle
-  - Yellow
-  - Purple
-  - Magenta
-  - Green
-  - Beige
-  - BlancSalle
-  - NeonBlue
-  - Orange
-  - Grey
-  - Lavander
-  - Lime
-  - Pink
   - White
-  - Turquoise
-  - NavyBlue
-  - Bordaux
-  - Brown
-  - Grass
   - Red
-  - Black
+  - LightRed
+  - DarkRed
   - Blue
-  - SkyBlue
+  - LightBlue
+  - DarkBlue
+  - Green
+  - LightGreen
+  - DarkGreen
+  - Yellow
+  - LightYellow
+  - DarkYellow
+  - Orange
+  - LightOrange
+  - DarkOrange
+  - Brown
+  - LightBrown
+  - DarkBrown
+  - Purple
+  - LightPurple
+  - DarkPurple
+  - Pink
+  - LightPink
+  - DarkPink
+  - Grey
+  - Black
   layers:
   - Default
   - TransparentFX

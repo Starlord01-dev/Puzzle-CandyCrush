@@ -241,6 +241,46 @@ public class LoadableBoard : MonoBehaviour
                             catch { }
                             Popables[i, j] = Instantiate(SelectablesPrefabs[23], new Vector2(i, j), Quaternion.identity);
                             break;
+                        case 24:
+                            try
+                            {
+                                Destroy(Popables[i, j]);
+                            }
+                            catch { }
+                            Popables[i, j] = Instantiate(SelectablesPrefabs[24], new Vector2(i, j), Quaternion.identity);
+                            break;
+                        case 25:
+                            try
+                            {
+                                Destroy(Popables[i, j]);
+                            }
+                            catch { }
+                            Popables[i, j] = Instantiate(SelectablesPrefabs[25], new Vector2(i, j), Quaternion.identity);
+                            break;
+                        case 26:
+                            try
+                            {
+                                Destroy(Popables[i, j]);
+                            }
+                            catch { }
+                            Popables[i, j] = Instantiate(SelectablesPrefabs[26], new Vector2(i, j), Quaternion.identity);
+                            break;
+                        case 27:
+                            try
+                            {
+                                Destroy(Popables[i, j]);
+                            }
+                            catch { }
+                            Popables[i, j] = Instantiate(SelectablesPrefabs[27], new Vector2(i, j), Quaternion.identity);
+                            break;
+                        case 28:
+                            try
+                            {
+                                Destroy(Popables[i, j]);
+                            }
+                            catch { }
+                            Popables[i, j] = Instantiate(SelectablesPrefabs[28], new Vector2(i, j), Quaternion.identity);
+                            break;
                         default:
                             Debug.LogError("Couldn't instatiate object.");
                             break;

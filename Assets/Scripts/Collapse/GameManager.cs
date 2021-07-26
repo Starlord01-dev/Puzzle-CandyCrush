@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     public string Path { get; set; }
 
     private void Awake()
-    {
+    {   
         if (instance == null)
         {
             instance = this;

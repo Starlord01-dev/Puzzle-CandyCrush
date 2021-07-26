@@ -420,7 +420,7 @@ public class LoadableBoard : MonoBehaviour
         ParticleSystem.MainModule mainMod = tempExplosion.GetComponent<ParticleSystem>().main;
         mainMod.startColor = tempColor;
         tempExplosion.GetComponent<ParticleSystem>().Play();
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(3);
         Destroy(tempExplosion);
     }
 

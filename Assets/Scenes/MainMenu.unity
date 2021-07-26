@@ -333,7 +333,6 @@ GameObject:
   m_Component:
   - component: {fileID: 153319398}
   - component: {fileID: 153319397}
-  - component: {fileID: 153319396}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -341,19 +340,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &153319396
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 153319395}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ffe97f1d702f3e44b8375a6d4d81f96, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  setPath: E:\Unity Projects\Puzzle-rip-candy-crush
 --- !u!114 &153319397
 MonoBehaviour:
   m_ObjectHideFlags: 0

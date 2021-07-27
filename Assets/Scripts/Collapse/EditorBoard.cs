@@ -27,6 +27,7 @@ public class EditorBoard : MonoBehaviour
 
     public bool editMode = true;
     public bool destroy = false;
+    public bool fill = false;
 
 
     void Start()
@@ -34,6 +35,13 @@ public class EditorBoard : MonoBehaviour
         path = GameManager.instance.Path;
         board = new BackgroundTile[width, height];
         Popables = new GameObject[width, height];
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                Popables[i, j] = null;
+            }
+        }
         numbOfBlocksPoped = 0;
         Score = 0;
         coinsCollected = 0;
@@ -64,23 +72,30 @@ public class EditorBoard : MonoBehaviour
             {
                 if (!destroy)
                 {
-                    if (((int)Mathf.Round(mousePos.x) < width + 1 && (int)Mathf.Round(mousePos.y) < height + 1))
+                    if (fill)
                     {
-                        try
+                        FillArea((int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y));
+                    }
+                    else
+                    {
+                        if (((int)Mathf.Round(mousePos.x) < width + 1 && (int)Mathf.Round(mousePos.y) < height + 1))
                         {
-                            if (Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)] == null)
+                            try
                             {
-                                Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)] = Instantiate(SelectablesPrefabs[selectedObject], new Vector2((int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)), Quaternion.identity);
-                                Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)].name = "( " + (int)Mathf.Round(mousePos.x) + " " + (int)Mathf.Round(mousePos.y) + " )";
+                                if (Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)] == null)
+                                {
+                                    Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)] = Instantiate(SelectablesPrefabs[selectedObject], new Vector2((int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)), Quaternion.identity);
+                                    Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)].name = "( " + (int)Mathf.Round(mousePos.x) + " " + (int)Mathf.Round(mousePos.y) + " )";
+                                }
+                                else
+                                {
+                                    Destroy(Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)]);
+                                    Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)] = Instantiate(SelectablesPrefabs[selectedObject], new Vector2((int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)), Quaternion.identity);
+                                    Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)].name = "( " + (int)Mathf.Round(mousePos.x) + " " + (int)Mathf.Round(mousePos.y) + " )";
+                                }
                             }
-                            else
-                            {
-                                Destroy(Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)]);
-                                Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)] = Instantiate(SelectablesPrefabs[selectedObject], new Vector2((int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)), Quaternion.identity);
-                                Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)].name = "( " + (int)Mathf.Round(mousePos.x) + " " + (int)Mathf.Round(mousePos.y) + " )";
-                            }
+                            catch { }
                         }
-                        catch { }
                     }
                 }
                 else if (destroy)
@@ -548,9 +563,9 @@ public class EditorBoard : MonoBehaviour
 
     public void ClearBoard()
     {
-        for(int i = 0; i < width; i++)
+        for (int i = 0; i < width; i++)
         {
-            for(int j = 0; j < height; j++)
+            for (int j = 0; j < height; j++)
             {
                 if (Popables[i, j] != null)
                 {
@@ -570,6 +585,82 @@ public class EditorBoard : MonoBehaviour
         tempExplosion.GetComponent<ParticleSystem>().Play();
         yield return new WaitForSeconds(0.2f);
         Destroy(tempExplosion);
+    }
+
+    private void FillArea(int x, int y)
+    {
+
+        if (Popables[x, y] == null)
+        {
+            Popables[x, y] = Instantiate(SelectablesPrefabs[selectedObject], new Vector2(x, y), Quaternion.identity);
+            Popables[x, y].name = "( " + x + " " + y + " )";
+        }
+        else
+        {
+            Destroy(Popables[x, y]);
+            Popables[x, y] = Instantiate(SelectablesPrefabs[selectedObject], new Vector2(x, y), Quaternion.identity);
+            Popables[x, y].name = "( " + x + " " + y + " )";
+        }
+
+        if (x + 1 < width)
+        {
+            if (Popables[x + 1, y] == null)
+            {
+                FillArea(x + 1, y);
+            }
+            else
+            {
+                if (Popables[x + 1, y].CompareTag(SelectablesPrefabs[selectedObject].tag))
+                {
+                    FillArea(x + 1, y);
+                }
+            }
+        }
+
+        if (x - 1 > 0)
+        {
+            if (Popables[x - 1, y] == null)
+            {
+                FillArea(x - 1, y);
+            }
+            else
+            {
+                if (Popables[x - 1, y].CompareTag(SelectablesPrefabs[selectedObject].tag))
+                {
+                    FillArea(x - 1, y);
+                }
+            }
+        }
+
+        if (y + 1 < height)
+        {
+            if (Popables[x, y + 1] == null)
+            {
+                FillArea(x, y + 1);
+            }
+            else
+            {
+                if (Popables[x, y + 1].CompareTag(SelectablesPrefabs[selectedObject].tag))
+                {
+                    FillArea(x, y + 1);
+                }
+            }
+        }
+
+        if (y - 1 > 0)
+        {
+            if (Popables[x, y - 1] == null)
+            {
+                FillArea(x, y - 1);
+            }
+            else
+            {
+                if (Popables[x, y - 1].CompareTag(SelectablesPrefabs[selectedObject].tag))
+                {
+                    FillArea(x, y - 1);
+                }
+            }
+        }
     }
 
 }

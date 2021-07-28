@@ -74,7 +74,21 @@ public class EditorBoard : MonoBehaviour
                 {
                     if (fill)
                     {
-                        FillArea((int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y));
+                        bool[,] visitedCells = new bool[width, height];
+                        string fillTag = "Untagged";
+                        try
+                        {
+                            fillTag = Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)].tag;
+                        }
+                        catch { }
+                        for(int i = 0; i < width; i++)
+                        {
+                            for(int j = 0; j < height; j++)
+                            {
+                                visitedCells[i, j] = true;
+                            }
+                        }
+                        FillArea((int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y), visitedCells, fillTag);
                     }
                     else
                     {
@@ -587,9 +601,10 @@ public class EditorBoard : MonoBehaviour
         Destroy(tempExplosion);
     }
 
-    private void FillArea(int x, int y)
+    private void FillArea(int x, int y, bool[,] visitedCells, string fillTag)
     {
 
+        //Fills current cell
         if (Popables[x, y] == null)
         {
             Popables[x, y] = Instantiate(SelectablesPrefabs[selectedObject], new Vector2(x, y), Quaternion.identity);
@@ -602,65 +617,66 @@ public class EditorBoard : MonoBehaviour
             Popables[x, y].name = "( " + x + " " + y + " )";
         }
 
-        if (x + 1 < width)
+
+
+        //Visiting other cells
+        if (x + 1 < width && visitedCells[x+1, y])
         {
-            if (Popables[x + 1, y] == null)
+            if (Popables[x + 1, y] == null )
             {
-                FillArea(x + 1, y);
+                visitedCells[x + 1, y] = false;
+                FillArea(x + 1, y, visitedCells, fillTag);
             }
-            else
+            else if(Popables[x + 1, y].CompareTag(fillTag))
             {
-                if (Popables[x + 1, y].CompareTag(SelectablesPrefabs[selectedObject].tag))
-                {
-                    FillArea(x + 1, y);
-                }
+                visitedCells[x + 1, y] = false;
+                FillArea(x + 1, y, visitedCells, fillTag);
             }
         }
 
-        if (x - 1 > 0)
+        if (x - 1 >= 0 && visitedCells[x - 1, y])
         {
             if (Popables[x - 1, y] == null)
             {
-                FillArea(x - 1, y);
+                visitedCells[x - 1, y] = false;
+                FillArea(x - 1, y, visitedCells, fillTag);
             }
-            else
+            else if(Popables[x - 1, y].CompareTag(fillTag))
             {
-                if (Popables[x - 1, y].CompareTag(SelectablesPrefabs[selectedObject].tag))
-                {
-                    FillArea(x - 1, y);
-                }
+                visitedCells[x - 1, y] = false;
+                FillArea(x - 1, y, visitedCells, fillTag);
             }
         }
 
-        if (y + 1 < height)
+        if (y + 1 < height && visitedCells[x, y+1])
         {
             if (Popables[x, y + 1] == null)
             {
-                FillArea(x, y + 1);
+                visitedCells[x, y + 1] = false;
+                FillArea(x, y + 1, visitedCells, fillTag);
             }
-            else
+            else if (Popables[x, y + 1].CompareTag(fillTag))
             {
-                if (Popables[x, y + 1].CompareTag(SelectablesPrefabs[selectedObject].tag))
-                {
-                    FillArea(x, y + 1);
-                }
+                visitedCells[x, y + 1] = false;
+                FillArea(x, y + 1, visitedCells, fillTag);
             }
         }
 
-        if (y - 1 > 0)
+        if (y - 1 >= 0 && visitedCells[x, y - 1])
         {
             if (Popables[x, y - 1] == null)
             {
-                FillArea(x, y - 1);
+                visitedCells[x, y - 1] = false;
+                FillArea(x, y - 1, visitedCells, fillTag);
             }
-            else
+            else if (Popables[x, y - 1].CompareTag(fillTag))
             {
-                if (Popables[x, y - 1].CompareTag(SelectablesPrefabs[selectedObject].tag))
-                {
-                    FillArea(x, y - 1);
-                }
+                visitedCells[x, y - 1] = false;
+                FillArea(x, y - 1, visitedCells, fillTag);
             }
+          
         }
+
     }
 
 }

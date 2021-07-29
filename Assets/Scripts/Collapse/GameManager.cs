@@ -22,7 +22,6 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
-        Path = Application.dataPath;
+        Path = Application.streamingAssetsPath;
     }
 }

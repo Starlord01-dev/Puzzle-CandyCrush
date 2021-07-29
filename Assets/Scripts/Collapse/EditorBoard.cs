@@ -23,11 +23,15 @@ public class EditorBoard : MonoBehaviour
     private BackgroundTile[,] board;
     public GameObject[,] Popables;
 
+    //public LevelSave levelSave;
+
     private Vector2 mousePos;
 
     public bool editMode = true;
     public bool destroy = false;
     public bool fill = false;
+
+
 
 
     void Start()
@@ -68,7 +72,7 @@ public class EditorBoard : MonoBehaviour
                     }
                 }
             }
-            else if (editMode)
+            else if (editMode && mousePos.y <height && mousePos.x <width)
             {
                 if (!destroy)
                 {
@@ -118,7 +122,7 @@ public class EditorBoard : MonoBehaviour
                     Popables[(int)Mathf.Round(mousePos.x), (int)Mathf.Round(mousePos.y)] = null;
                 }
             }
-            else
+            else if(mousePos.y < height && mousePos.x < width)
             {
                 try
                 {
@@ -293,7 +297,7 @@ public class EditorBoard : MonoBehaviour
 
     public void SaveBoard()
     {
-        SaveSystem.SaveBoard(this);
+        SaveSystem.SaveBoard(this);      
     }
 
     public void LoadBoard()

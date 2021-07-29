@@ -4067,6 +4067,7 @@ MonoBehaviour:
   - {fileID: 6074069262274522402, guid: a43f4f24b527c3945b7687701ab744b3, type: 3}
   - {fileID: 1691057744850217303, guid: 697cbfa3e1fa4934681e9287b97a9d44, type: 3}
   - {fileID: 6721416036214394184, guid: 76ab57131c490fb42a0e082c417364ac, type: 3}
+  levelSave: {fileID: 11400000, guid: 0008bda8fcc309344b83bf2751522701, type: 2}
   editMode: 1
   destroy: 0
   fill: 0

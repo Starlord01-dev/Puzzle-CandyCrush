@@ -38,7 +38,7 @@ public static class SaveSystem
             FileStream stream = new FileStream(path, FileMode.Open);
 
             LevelData data = formatter.Deserialize(stream) as LevelData;
-            stream.Close(); 
+            stream.Close();
 
             return data;
         }
@@ -72,7 +72,24 @@ public static class SaveSystem
 
     public static LevelData LoadLevel(string LevelId, string Boardpath)
     {
-        string path = Boardpath + "\\Maps" + "\\board" + LevelId + ".collapse";
+        var loadingRequest = UnityEngine.Networking.UnityWebRequest.Get(Boardpath + "\\Maps" + "\\board" + LevelId + ".collapse");
+        loadingRequest.SendWebRequest();
+        while (!loadingRequest.isDone)
+        {
+            if (loadingRequest.isNetworkError || loadingRequest.isHttpError)
+            {
+                break;
+            }
+        }
+        if (loadingRequest.isNetworkError || loadingRequest.isHttpError)
+        {
+
+        }
+        else
+        {
+            File.WriteAllBytes(Path.Combine(Application.persistentDataPath + LevelId + ".collapse"), loadingRequest.downloadHandler.data);
+        }
+        String path = Application.persistentDataPath + LevelId + ".collapse";
         if (File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();
